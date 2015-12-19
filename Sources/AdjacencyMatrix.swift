@@ -133,10 +133,11 @@ private class Matrix<T> {
     }
 
     /**
-     Removes a given row from the matrix.  Returns `Bit.One` if the row
-     was in the matrix, or `.Zero` otherwise.
+     Removes a given row from the matrix.
 
      - parameter row: The row to be removed.
+
+     - returns: `Bit.One` if the row was in the matrix, or `.Zero` otherwise.
 
      - complexity: O(`nRows` * `nCols`)
     */
@@ -159,6 +160,8 @@ private class Matrix<T> {
      column was in the matrix, or `.Zero` otherwise.
 
      - parameter col: The column to be removed.
+
+     - returns: `Bit.One` if the column was in the matrix, or `.Zero` otherwise.
 
      - complexity: O(`nRows` * `nCols`)
     */
@@ -205,7 +208,7 @@ private extension Dictionary {
 }
 
 /**
- Adjacency matrices for undirected graphs.
+ Adjacency matrices for general graphs.
 
  The `AdjacencyMatrix` class is only capable of keeping track of the size and
  shape of the matrix.  To use adjacency matrices as graphs, use its subclasses,
@@ -213,7 +216,7 @@ private extension Dictionary {
 */
 public class AdjacencyMatrix<Vertex: Hashable> {
     /** The adjacency matrix itself.  */
-    private var matrix: Matrix<Int>
+    private var matrix: Matrix<Int8>
 
     /**
      A dictionary mapping vertices to their indices in the matrix.
@@ -538,9 +541,6 @@ public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     /**
      Creates an array of all vertices reachable from a vertex.
 
-     A *default implementation* using `vertices` and `edgeExists` is provided.
-     It works in O(V) time.
-
      - parameter vertex: The vertex whose neighbors to retrieve.
 
      - returns: An array of all vertices with edges from `vertex` to them, in no
@@ -567,13 +567,13 @@ public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     }
 
     /**
-     Adds a new edge between two vertices.
+     Adds a new edge from one edge to another.
    
-     Changes the graph in-place to add the edge.  This operation is symmetric;
-     flipping the arguments makes no difference in the result.
+     Changes the graph in-place to add the edge.  The new edge will go from
+     `from` to `to`.
 
-     - parameter from: One vertex on the edge.
-     - parameter to: The other vertex on the edge.
+     - parameter from: The 'source' of the edge.
+     - parameter to: The 'destination' of the edge.
 
      - throws: `GraphError.VertexNotPresent` if either vertex is not in the
        graph.
