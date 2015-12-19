@@ -84,9 +84,10 @@ public protocol Graph {
     /**
      Adds a new edge to the graph from one vertex to another.
    
-     Changes the graph in-place to add the edges.
+     Changes the graph in-place to add the edge.
 
-     - parameter from: One of the vertices to add.
+     - parameter from: The vertex to start the edge from.
+     - parameter to: The vertex the edge ends on.
 
      - throws: `GraphError.VertexNotPresent` if either vertex is not in the
        graph.
