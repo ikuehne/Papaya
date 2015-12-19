@@ -32,6 +32,31 @@ public protocol Graph {
     typealias Vertex
 
     /**
+     Initializes an empty graph.
+    */
+    init()
+
+    /**
+     Initializes a graph with the given vertices and no edges.
+
+     A *default implementation* using the empty initializer and `addVertex` is
+     provided.
+
+     - parameter vertices: A collection of vertices to include initially.
+    */
+    init<V: CollectionType where V.Generator.Element == Vertex> (vertices: V)
+
+    /**
+     Initializes a graph with the same vertices and edges as the given graph.
+
+     A *default implementation* using the empty initializer, `addVertex`, and
+     `addEdge` is provided.
+
+     - parameter graph: The graph to copy.
+    */
+    init<G: Graph where G.Vertex == Vertex>(graph: G)
+
+    /**
      An array of all the vertices in the graph.
     */
     var vertices: [Vertex] { get }
@@ -171,6 +196,26 @@ public protocol WeightedGraph: Graph {
 
 // Provides a default implementation for the `neighbors` function.
 public extension Graph {
+    public init<V: CollectionType
+                where V.Generator.Element == Vertex> (vertices: V) {
+        self = Self()
+        for vertex in vertices {
+            do {
+                try addVertex(vertex)
+            // If a vertex is duplicated, just ignore it.
+            } catch { }
+        }
+    }
+
+    public init<G: Graph where G.Vertex == Vertex>(graph: G) {
+        self = Self(vertices: graph.vertices)
+        for (from, to) in graph.edges {
+            // For a properly implemented graph, the edges are all unique and
+            // this will never throw.
+            try! addEdge(from, to: to)
+        }
+    }
+
     public func neighbors(vertex: Vertex) throws -> [Vertex] {
         var neighbors: [Vertex] = []
 

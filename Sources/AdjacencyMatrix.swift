@@ -219,6 +219,32 @@ public class AdjacencyMatrix<Vertex: Hashable> {
     final private var matrix: Matrix<Int8>
 
     /**
+     Initializer that takes a collection of vertices, and starts with no edges.
+
+     - parameter vertices: A collection of vertices to include initially.
+
+     - complexity: O(`vertices.count`²)
+    */
+    required public init<V: CollectionType
+                where V.Generator.Element == Vertex> (vertices: V) {
+        vertexMap = Dictionary<Vertex, Int>()
+        indexMap = Dictionary<Int, Vertex>()
+        var i = 0
+        for vertex in vertices {
+            vertexMap[vertex] = i
+            indexMap[i] = vertex
+            i++
+        }
+        matrix = Matrix(rows: i, cols: i, repeatedValue: 0)
+    }
+
+    required public init() {
+        matrix = Matrix<Int8>(rows: 0, cols: 0, repeatedValue: 0)
+        vertexMap = Dictionary<Vertex, Int>()
+        indexMap = Dictionary<Int, Vertex>()
+    }
+
+    /**
      A dictionary mapping vertices to their indices in the matrix.
 
      This dictionary adds an extra level of indirection and overhead; however,
@@ -240,27 +266,6 @@ public class AdjacencyMatrix<Vertex: Hashable> {
     final private var size: Int {
         get {
             return matrix.nRows
-        }
-    }
-
-    /**
-     Initializer that takes a collection of vertices, and starts with no edges.
-
-     - parameter vertices: A collection of vertices to include initially.
-
-     - complexity: O(`vertices.count`²)
-    */
-    public init<V: CollectionType
-                where V.Generator.Element == Vertex,
-                      V.Index == Int>(vertices: V) {
-        matrix = Matrix(rows: vertices.count, cols: vertices.count,
-                        repeatedValue: 0)
-        vertexMap = Dictionary<Vertex, Int>()
-        indexMap = Dictionary<Int, Vertex>()
-
-        for (index, vertex) in vertices.enumerate() {
-            vertexMap[vertex] = index
-            indexMap[index] = vertex
         }
     }
     
@@ -334,8 +339,15 @@ public class AdjacencyMatrix<Vertex: Hashable> {
 /**
  Adjacency matrices for undirected graphs.
 */
-public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
+final public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
                                                     UndirectedGraph {
+
+    required public init() {
+        super.init()
+    }
+/*    required public init<V: CollectionType where V.Generator.Element == Vertex,
+                                                 V.Index == Int> (vertices: V)
+    required public init<G: Graph where G.Vertex == Vertex>(graph: G)*/
     /**
      An array of all the edges in the graph, represented as tuples of vertices.
 
@@ -488,8 +500,13 @@ public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
 /**
  Adjacency matrices for directed graphs.
 */
-public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
-                                                  DirectedGraph {
+final public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
+                                                        DirectedGraph {
+
+    required public init() {
+        super.init()
+    }
+
     /**
      An array of all the edges in the graph, represented as tuples of vertices.
     
