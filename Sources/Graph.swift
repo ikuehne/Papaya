@@ -1,16 +1,131 @@
+/*
+ This file defines a graph types as protocols, as well as related errors.
+*/
+
 /**
- A protocol including basic Graph operations.
+ Errors related to the `Graph` protocol.
 
- */
+ - `.VertexAlreadyPresent`: Error due to a vertex already being in the graph.
+ - `.VertexNotPresent`: Error due to a vertex not being in the graph.
+ - `.EdgeNotPresent`: Error due to an edge not being in the graph.
+*/
+public enum GraphError {
+    case VertexAlreadyPresent
+    case VertexNotPresent
+    case EdgeNotPresent
+}
 
-protocol Graph {
+/**
+ Description of abstract graph type.
 
-    typealias NodeType
+ Provides a generic set of graph operations, without assuming a  weighting on
+ the graph.
+*/
+public protocol Graph {
+    /**
+     Type representing vertices.
 
-    mutating func addNode(node: NodeType) throws
+     All instances of this type in the graph should be unique, so that 
+     ∀ v ∈ `vertices`, (v, v') ∈ `edges` & v'' = v ⟹  (v'', v') ∈ `edges`.  That
+     is, all edges and vertices should be unique.
+    */
+    typealias Vertex
 
-    mutating func addEdge(from node1: NodeType, to node2: NodeType) throws
+    /**
+     An array of all the vertices in the graph.
+    */
+    var vertices: [Vertex] { get }
 
-    func adjacentTo(node: NodeType) -> [NodeType] throws
+    /**
+     An array of all the edges in the graph, represented as tuples of vertices.
+    */
+    var edges: [(Vertex, Vertex)] { get }
 
+    /**
+     Returns whether there is an edge from one vertex to another in the graph.
+
+     - parameter from: The vertex to check from.
+     - parameter to: The destination vertex.
+
+     - returns: `true` if the edge exists; `false` otherwise.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex is not in the
+       graph.
+    */
+    func edgeExists(from: Vertex, to: Vertex) throws -> Bool
+
+    /**
+     Creates an array of all vertices reachable from a vertex.
+
+     A *default implementation* using `vertices` and `edgeExists` is provided.
+     It works in O(V) time.
+
+     - parameter vertex: The vertex whose neighbors to retrieve.
+
+     - returns: An array of all vertices with edges from `vertex` to them, in no
+       particular order, and not including `vertex` unless there is a loop.
+
+     - throws: `GraphError.VertexNotPresent` if `vertex` is not in the graph.
+    */
+    func neighbors(vertex: Vertex) throws -> [Vertex]
+
+    /**
+     Adds a new vertex to the graph with no edges connected to it.
+
+     Changes the graph in-place to add the vertex.
+
+     - parameter vertex: The vertex to add.
+
+     - throws: `GraphError.VertexAlreadyPresent` if `vertex` is already in the
+       graph.
+    */
+    mutating func addVertex(vertex: Vertex) throws
+
+    /**
+     Adds a new edge to the graph from one vertex to another.
+   
+     Changes the graph in-place to add the edges.
+
+     - parameter from: One of the vertices to add
+
+     - throws: `GraphError.VertexNotPresent` if either vertex is not in the
+       graph.
+    */
+    mutating func addEdge(from: Vertex, to: Vertex) throws
+
+    /**
+     Removes a vertex and all edges connected to it.
+
+     - parameter vertex: The vertex to remove.
+
+     - throws: `GraphError.VertexNotPresent` if the vertex to be deleted is not
+       in the graph.
+    */
+    mutating func removeVertex(vertex: Vertex) throws
+
+    /**
+     Removes an edge from one vertex to another.
+
+     - parameter from: The 'source' of the edge.
+     - parameter to: The 'destination' of the edge.
+
+     - throws: `GraphError.EdgeNotPresent` if the edge to be removed is not in
+       the graph.
+    */
+    mutating func removeEdge(from: Vertex, to: Vertex) throws
+}
+
+// Provides a default implementation for the `neighbors` function.
+extension Graph {
+    func neighbors(vertex vertex1: Vertex) throws -> [Vertex] {
+        var neighbors: [Vertex] = []
+
+        for vertex2 in vertices {
+            if try edgeExists(vertex1, to: vertex2) {
+                neighbors.append(vertex1)
+            }
+        }
+
+        return neighbors
+    }
 }
