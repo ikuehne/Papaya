@@ -203,7 +203,7 @@ private class Matrix<T> {
 private extension Dictionary {
     /** Test if a dictionary contains a key. */
     func contains(key: Key) -> Bool {
-        return self[key] == nil
+        return self[key] != nil
     }
 }
 
