@@ -248,8 +248,8 @@ public class AdjacencyMatrix<Vertex: Hashable> {
     */
     required public init() {
         matrix = Matrix<Int8>(rows: 0, cols: 0, repeatedValue: 0)
-        vertexMap = Dictionary<Vertex, Int>()
-        indexMap = Dictionary<Int, Vertex>()
+        vertexMap = [Vertex: Int]()
+        indexMap = [Int: Vertex]()
     }
 
     /**
