@@ -227,6 +227,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
     */
     required public init<V: CollectionType
                 where V.Generator.Element == Vertex> (vertices: V) {
+        // These can also be written [Vertex: Int]()
         vertexMap = Dictionary<Vertex, Int>()
         indexMap = Dictionary<Int, Vertex>()
         var i = 0
