@@ -86,7 +86,7 @@ public protocol Graph {
    
      Changes the graph in-place to add the edges.
 
-     - parameter from: One of the vertices to add
+     - parameter from: One of the vertices to add.
 
      - throws: `GraphError.VertexNotPresent` if either vertex is not in the
        graph.
@@ -122,7 +122,7 @@ public protocol Graph {
  implement this protocol if the `edgeExists` function is reflexive, i.e. if the
  edges have no associated direction.
 */
-protocol UndirectedGraph: Graph { }
+public protocol UndirectedGraph: Graph { }
 
 /**
  Description of a directed graph.
@@ -131,14 +131,14 @@ protocol UndirectedGraph: Graph { }
  implement this protocol if the `edgeExists` function is not reflexive, i.e. if
  the edges have an associated direction.
 */
-protocol DirectedGraph: Graph { }
+public protocol DirectedGraph: Graph { }
 
 /**
  Description of a weighted graph.
 
  Weighted graphs have a weight associated with each edge.
 */
-protocol WeightedGraph: Graph {
+public protocol WeightedGraph: Graph {
     /**
      Computes the weight associated with the given edge.
 
@@ -155,8 +155,8 @@ protocol WeightedGraph: Graph {
 }
 
 // Provides a default implementation for the `neighbors` function.
-extension Graph {
-    func neighbors(vertex vertex1: Vertex) throws -> [Vertex] {
+public extension Graph {
+    public func neighbors(vertex vertex1: Vertex) throws -> [Vertex] {
         var neighbors: [Vertex] = []
 
         for vertex2 in vertices {
