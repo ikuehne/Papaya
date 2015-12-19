@@ -11,7 +11,7 @@
  The contiguous arrays implemented in this class have a more efficient memory
  layout at the expense of forcing all rows to be of the same length.
  */
-private class Matrix<T> {
+final private class Matrix<T> {
     /**
      An array containing the contents of the matrix.  Laid out such that row 0,
      column 0 is adjacent to row 0, column 1 in memory, while row 0, column 0 is
@@ -216,7 +216,7 @@ private extension Dictionary {
 */
 public class AdjacencyMatrix<Vertex: Hashable> {
     /** The adjacency matrix itself.  */
-    private var matrix: Matrix<Int8>
+    final private var matrix: Matrix<Int8>
 
     /**
      A dictionary mapping vertices to their indices in the matrix.
@@ -225,19 +225,19 @@ public class AdjacencyMatrix<Vertex: Hashable> {
      it allows arbitrary hashable values to be used to name vertices while still
      using efficient integer indexing under the hood.
     */
-    private var vertexMap: [Vertex: Int]
+    final private var vertexMap: [Vertex: Int]
 
     /**
      The corresponding dictionary mapping indices back to vertices.
     */
-    private var indexMap: [Int: Vertex]
+    final private var indexMap: [Int: Vertex]
 
     /**
      The number of vertices in the graph.
 
      - complexity: O(1)
     */
-    private var size: Int {
+    final private var size: Int {
         get {
             return matrix.nRows
         }
@@ -269,7 +269,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
 
      - complexity: O(V)
     */
-    public var vertices: [Vertex] {
+    final public var vertices: [Vertex] {
         get {
             var result: [Vertex] = []
             for vertex in vertexMap.keys {
@@ -293,7 +293,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
 
      - complexity: O(V²)
     */
-    public func addVertex(vertex: Vertex) throws {
+    final public func addVertex(vertex: Vertex) throws {
         if vertexMap.contains(vertex) {
             throw GraphError.VertexAlreadyPresent
         }
@@ -316,7 +316,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
 
      - complexity: O(V²)
     */
-    public func removeVertex(vertex: Vertex) throws {
+    final public func removeVertex(vertex: Vertex) throws {
 
         guard let index = vertexMap[vertex] else {
             throw GraphError.VertexNotPresent
