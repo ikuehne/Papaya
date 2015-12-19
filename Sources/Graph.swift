@@ -9,7 +9,7 @@
  - `.VertexNotPresent`: Error due to a vertex not being in the graph.
  - `.EdgeNotPresent`: Error due to an edge not being in the graph.
 */
-public enum GraphError {
+public enum GraphError: ErrorType {
     case VertexAlreadyPresent
     case VertexNotPresent
     case EdgeNotPresent
@@ -170,12 +170,12 @@ public protocol WeightedGraph: Graph {
 
 // Provides a default implementation for the `neighbors` function.
 public extension Graph {
-    public func neighbors(vertex vertex1: Vertex) throws -> [Vertex] {
+    public func neighbors(vertex: Vertex) throws -> [Vertex] {
         var neighbors: [Vertex] = []
 
         for vertex2 in vertices {
-            if try edgeExists(vertex1, to: vertex2) {
-                neighbors.append(vertex1)
+            if try edgeExists(vertex, to: vertex2) {
+                neighbors.append(vertex)
             }
         }
 
