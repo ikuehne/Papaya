@@ -145,7 +145,7 @@ final private class Matrix<T> {
         if row >= nRows {
             return Bit.Zero
         }
-        var newContents: [T] = []
+        var newContents = [T]()
         let beforeRow = contents[0..<(row * nCols)]
         let afterRow = contents[((row + 1) * nCols)..<(nRows * nCols)]
         newContents.appendContentsOf(beforeRow)
@@ -169,7 +169,7 @@ final private class Matrix<T> {
         if col >= nCols {
             return Bit.Zero
         }
-        var newContents: [T] = []
+        var newContents = [T]()
         for (index, item) in contents.enumerate() {
             if (index % nCols) != 0 {
                 newContents.append(item)
@@ -271,7 +271,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
     */
     final public var vertices: [Vertex] {
         get {
-            var result: [Vertex] = []
+            var result = [Vertex]()
             for vertex in vertexMap.keys {
                 result.append(vertex)
             }
@@ -343,7 +343,7 @@ public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     */
     public var edges: [(Vertex, Vertex)] {
         get {
-            var result: [(Vertex, Vertex)] = []
+            var result = [(Vertex, Vertex)]()
             for row in 0..<size {
                 for col in row..<size {
                     if matrix[row, col] == 1{
@@ -402,7 +402,7 @@ public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
             throw GraphError.VertexNotPresent
         }
 
-        var result: [Vertex] = []
+        var result = [Vertex]()
 
         for row in 0..<index {
             if matrix[row, index] == 1 {
@@ -500,7 +500,7 @@ public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     */
     public var edges: [(Vertex, Vertex)] {
         get {
-            var result: [(Vertex, Vertex)] = []
+            var result = [(Vertex, Vertex)]()
             for row in 0..<size {
                 for col in 0..<size {
                     if matrix[row, col] == 1{
@@ -555,7 +555,7 @@ public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
             throw GraphError.VertexNotPresent
         }
 
-        var result: [Vertex] = []
+        var result = [Vertex]()
 
         for row in 0..<size {
             if matrix[row, index] == 1 {
