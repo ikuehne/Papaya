@@ -1,5 +1,5 @@
 /*
- This file defines a graph types as protocols, as well as related errors.
+ This file defines graph types as protocols, as well as related errors.
 */
 
 /**
@@ -18,7 +18,7 @@ public enum GraphError {
 /**
  Description of abstract graph type.
 
- Provides a generic set of graph operations, without assuming a  weighting on
+ Provides a generic set of graph operations, without assuming a weighting on
  the graph.
 */
 public protocol Graph {
@@ -113,6 +113,45 @@ public protocol Graph {
        the graph.
     */
     mutating func removeEdge(from: Vertex, to: Vertex) throws
+}
+
+/**
+ Description of an undirected graph.
+
+ This protocol is identical to Graph and DirectedGraph, but new types should
+ implement this protocol if the `edgeExists` function is reflexive, i.e. if the
+ edges have no associated direction.
+*/
+protocol UndirectedGraph: Graph { }
+
+/**
+ Description of a directed graph.
+
+ This protocol is identical to Graph and UndirectedGraph, but new types should
+ implement this protocol if the `edgeExists` function is not reflexive, i.e. if
+ the edges have an associated direction.
+*/
+protocol DirectedGraph: Graph { }
+
+/**
+ Description of a weighted graph.
+
+ Weighted graphs have a weight associated with each edge.
+*/
+protocol WeightedGraph: Graph {
+    /**
+     Computes the weight associated with the given edge.
+
+     - parameter to: The 'source' of the edge to use.
+     - parameter from: The 'destination' of the edge to use.
+
+     - returns: The weight associated with the given edge, or `nil` if the edge
+       is not in the graph.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex is not in the
+       graph.
+    */
+    func weight(from: Vertex, to: Vertex) throws -> Double?
 }
 
 // Provides a default implementation for the `neighbors` function.
