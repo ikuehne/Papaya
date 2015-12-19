@@ -212,7 +212,7 @@ private extension Dictionary {
 
  The `AdjacencyMatrix` class is only capable of keeping track of the size and
  shape of the matrix.  To use adjacency matrices as graphs, use its subclasses,
- UndirectedAdjacencyMatrix and DirectedAdjacencyMatrix.
+ UndirectedAMatrix and DirectedAMatrix.
 */
 public class AdjacencyMatrix<Vertex: Hashable> {
     /** The adjacency matrix itself.  */
@@ -238,6 +238,14 @@ public class AdjacencyMatrix<Vertex: Hashable> {
         matrix = Matrix(rows: i, cols: i, repeatedValue: 0)
     }
 
+    /**
+     Empty initializer.
+
+     This initializer is not recommended for large graphs, because adding
+     vertices to an existing graph is an expensive operation.
+
+     - complexity: O(1)
+    */
     required public init() {
         matrix = Matrix<Int8>(rows: 0, cols: 0, repeatedValue: 0)
         vertexMap = Dictionary<Vertex, Int>()
@@ -345,9 +353,7 @@ final public class UndirectedAMatrix<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     required public init() {
         super.init()
     }
-/*    required public init<V: CollectionType where V.Generator.Element == Vertex,
-                                                 V.Index == Int> (vertices: V)
-    required public init<G: Graph where G.Vertex == Vertex>(graph: G)*/
+
     /**
      An array of all the edges in the graph, represented as tuples of vertices.
 
