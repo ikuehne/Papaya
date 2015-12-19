@@ -152,6 +152,20 @@ protocol WeightedGraph: Graph {
        graph.
     */
     func weight(from: Vertex, to: Vertex) throws -> Double?
+
+    /**
+     Adds a new weighted edge to the graph from one vertex to another.
+
+     Changes the graph in-place to add the edge.
+
+     - parameter to: The 'source' of the edge to use.
+     - parameter from: The 'destination' of the edge to use.
+     - parameter weight: The 'weight' of the new edge to add.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex in the edge
+       does not exist in the graph.
+     */
+    mutating func addEdge(from: Vertex, to: Vertex, weight: Double) throws
 }
 
 // Provides a default implementation for the `neighbors` function.
