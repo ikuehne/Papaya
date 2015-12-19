@@ -339,8 +339,8 @@ public class AdjacencyMatrix<Vertex: Hashable> {
 /**
  Adjacency matrices for undirected graphs.
 */
-final public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
-                                                    UndirectedGraph {
+final public class UndirectedAMatrix<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
+                                                        UndirectedGraph {
 
     required public init() {
         super.init()
@@ -500,8 +500,8 @@ final public class UndirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex
 /**
  Adjacency matrices for directed graphs.
 */
-final public class DirectedAdjacency<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
-                                                        DirectedGraph {
+final public class DirectedAMatrix<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
+                                                      DirectedGraph {
 
     required public init() {
         super.init()
