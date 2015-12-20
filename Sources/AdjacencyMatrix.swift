@@ -562,7 +562,7 @@ final public class DirectedAMatrix<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
     }
 
     /**
-     Creates an array of all vertices reachable from a vertex.
+     Creates an array of all vertices reachable in one step from a vertex.
 
      - parameter vertex: The vertex whose neighbors to retrieve.
 
