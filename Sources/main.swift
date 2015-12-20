@@ -8,7 +8,7 @@
 let names = ["Kevin Bacon", "Nets Katz", "Paul Erdos", "Natalie Portman",
              "MC Bat Commander"]
 
-var graph = UndirectedAMatrix(vertices: names)
+var graph = UndirectedAList(vertices: names)
 
 print(graph.vertices)
 
@@ -31,3 +31,10 @@ do {
 } catch {
     print("couldn't add ian for some reason.")
 }
+
+var graph2 = UndirectedAMatrix(graph: graph)
+
+print(graph2.vertices)
+print(graph2.edges)
+print(graph.vertices)
+print(graph.edges)

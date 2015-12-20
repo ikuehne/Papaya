@@ -115,36 +115,6 @@ public class AdjacencyList<Vertex: Hashable> {
             removeFromArray(vertex, fromArr: &adjacencyList[neighbor]!)
         }
     }
-    
-}
-
-final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
-                                                      UndirectedGraph {
-
-    required public override init() {
-        super.init()
-    }
-
-    /**
-     A computed array of all the edges in the graph, as tuples of vertices.
-
-     - Complexity: O(E)
-     */
-    public var edges: [(Vertex, Vertex)] {
-        get {
-            var result = [(Vertex, Vertex)]()
-            var visited = Set<Vertex>()
-            for (vertex, neighbors) in adjacencyList {
-                for neighbor in neighbors {
-                    if !visited.contains(neighbor) {
-                        result.append((vertex, neighbor))
-                    }
-                }
-                visited.insert(vertex)
-            }
-            return result
-        }
-    }
 
     /**
      Returns whether there is an edge between two vertices in the graph.
@@ -187,6 +157,39 @@ final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
         }
 
         return neighbors
+    }
+}
+
+/**
+ An undirected adjacency list. Edges are symmetric - v is adjacent to u iff
+ u is adjacent to v.
+ */
+final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
+                                                      UndirectedGraph {
+
+    required public override init() {
+        super.init()
+    }
+
+    /**
+     A computed array of all the edges in the graph, as tuples of vertices.
+
+     - Complexity: O(E)
+     */
+    public var edges: [(Vertex, Vertex)] {
+        get {
+            var result = [(Vertex, Vertex)]()
+            var visited = Set<Vertex>()
+            for (vertex, neighbors) in adjacencyList {
+                for neighbor in neighbors {
+                    if !visited.contains(neighbor) {
+                        result.append((vertex, neighbor))
+                    }
+                }
+                visited.insert(vertex)
+            }
+            return result
+        }
     }
 
     /**
@@ -244,5 +247,90 @@ final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
         }
         removeFromArray(to, fromArr: &adjacencyList[from]!)
         removeFromArray(from, fromArr: &adjacencyList[to]!)
+        // same as above, would like to use guard var, need to look for
+        // alternatives.
+    }
+}
+
+
+/**
+ Directed adjacency list. When using this class, source is different from
+ destination vertex in an edge.
+ */
+final public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
+                                                    DirectedGraph {
+    
+    required public override init() {
+        super.init()
+    }
+
+    /**
+     A computed array of all the edges in the graph, as tuples of vertices.
+
+     - complexity: O(E)
+     */
+    public var edges: [(Vertex, Vertex)] {
+        get {
+            var result = [(Vertex, Vertex)]()
+            for (vertex, neighbors) in adjacencyList {
+                for neighbor in neighbors {
+                    result.append((vertex, neighbor))
+                }
+            }
+            return result
+        }
+    }
+
+    // edgeExists function is the same in directed and undirected ALists -
+    // move to general AdjacencyList.
+
+    // neighbors function is the same in directed and undirected ALists -
+    // also move to general AdjacencyList.
+
+    /**
+     Adds a new edge from one vertex to another in the graph.
+
+     This is an asymmetric operation: order of arguments matters!
+
+     - parameter from: the source vertex of the desired edge
+     - parameter to: the destination vertex of the desired edge
+
+     - throws: `GraphError.VertexNotPresent` if either vertex is not in the
+       graph.
+
+     - complexity: O(1)
+     */
+    public func addEdge(from: Vertex, to: Vertex) throws {
+        guard let _ = adjacencyList[from] else {
+            throw GraphError.VertexNotPresent
+        }
+        guard let _ = adjacencyList[to] else {
+            throw GraphError.VertexNotPresent
+        }
+        adjacencyList[from]!.append(to)
+    }
+
+    /**
+     Remove an edge from the graph.
+
+     - parameter from: the source vertex of the edge to remove.
+     - parameter to: the destination vertex of the edge to remove.
+
+     - throws: `GraphError.EdgeNotPresent` if the edge doesn't exist in the
+       graph, `GraphError.VertexNotPresent` if either vertex doesn't exist.
+
+     - complexity: O(V), or O(D)
+     */
+    public func removeEdge(from: Vertex, to: Vertex) throws {
+        guard let neighborsFrom = adjacencyList[from] else {
+            throw GraphError.VertexNotPresent
+        }
+        guard let _ = adjacencyList[to] else {
+            throw GraphError.VertexNotPresent
+        }
+        guard neighborsFrom.contains(to) else {
+            throw GraphError.EdgeNotPresent
+        }
+        removeFromArray(to, fromArr: &adjacencyList[from]!)
     }
 }
