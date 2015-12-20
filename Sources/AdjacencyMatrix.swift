@@ -233,7 +233,7 @@ public class AdjacencyMatrix<Vertex: Hashable> {
         for vertex in vertices {
             vertexMap[vertex] = i
             indexMap[i] = vertex
-            i++
+            i += 1
         }
         matrix = Matrix(rows: i, cols: i, repeatedValue: 0)
     }
