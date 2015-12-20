@@ -133,12 +133,14 @@ final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
     public var edges: [(Vertex, Vertex)] {
         get {
             var result = [(Vertex, Vertex)]()
+            var visited = Set<Vertex>()
             for (vertex, neighbors) in adjacencyList {
                 for neighbor in neighbors {
-                    result.append((vertex, neighbor))
+                    if !visited.contains(neighbor) {
+                        result.append((vertex, neighbor))
+                    }
                 }
-                // This doesn't match the UndirectedAMatrix's behavior
-                // of only including each edge once in the list.
+                visited.insert(vertex)
             }
             return result
         }
