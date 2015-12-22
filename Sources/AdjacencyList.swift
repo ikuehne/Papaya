@@ -20,13 +20,18 @@ private func removeFromArray<T: Hashable>(object: T, inout fromArr: [T]) {
 /**
  Unweighted Adjacency list.
 
+ Stores a graph as a dictionary of vertices with an array of directly adjacent
+ vertices. More memory efficient than adjacency matrices, but determining
+ direct adjacency takes more time.
+
  Includes basic functionality, but cannot be used as a graph because it does
- not know whether or not it's directed.
+ not know whether or not it's directed. Directed and Undirected AList inherit
+ from this class.
  */
 public class AdjacencyList<Vertex: Hashable> {
 
     /**
-     A dictionary of vertices with their neighbor lists.
+     Graph is stored as a dictionary of vertices with their neighbor lists.
      */
     private var adjacencyList = [Vertex: [Vertex]]()
 
@@ -35,7 +40,7 @@ public class AdjacencyList<Vertex: Hashable> {
     }
 
     /**
-     Number of vertices in the graph.
+     A computed property of number of vertices currently in the graph.
      */
     private var size: Int {
         get {
@@ -46,7 +51,9 @@ public class AdjacencyList<Vertex: Hashable> {
     /**
      Initializer that takes a collection of vertices with no edges.
 
-     - parameter vertices: A collection of vertice to include.
+     Sets all of their neighbor lists to the empty list.
+
+     - parameter vertices: A collection of vertices to include.
 
      - complexity: O(`vertices.count`)
      */
@@ -70,7 +77,7 @@ public class AdjacencyList<Vertex: Hashable> {
     }
 
     /**
-     Adds a new disconnected vertex to the graph.
+     Adds a new disconnected (no edges) vertex to the graph.
 
      - parameter vertex: The vertex to add.
     
@@ -82,8 +89,7 @@ public class AdjacencyList<Vertex: Hashable> {
     public func addVertex(vertex: Vertex) throws {
         if let _ = adjacencyList[vertex] {
             // The Swift Programming Language book seems to prefer the pattern
-            // `if <something> != nil` to this optional binding to the empty
-            // pattern.
+            // `if <something> != nil` to this optional binding to underscore
             throw GraphError.VertexAlreadyPresent
         }
         else {
@@ -100,7 +106,7 @@ public class AdjacencyList<Vertex: Hashable> {
        not in the graph.
 
      - complexity: Unsure, but high. removeFromArray calls take O(E) time, and
-       there are O(V) such calls, so at least O(EV).
+       there are O(V) such calls, so O(EV). Tighter bound?
      */
     public func removeVertex(vertex: Vertex) throws {
         guard let neighbors = adjacencyList[vertex] else {
@@ -113,7 +119,7 @@ public class AdjacencyList<Vertex: Hashable> {
             guard let _ = adjacencyList[neighbor] else {
                 throw GraphError.VertexNotPresent
                 // If this happens, the vertex to remove has a neighbor
-                // which is not in the graph. Very bad.
+                // which is not in the graph. Should never happen.
             }
             removeFromArray(vertex, fromArr: &adjacencyList[neighbor]!)
         }
@@ -146,6 +152,9 @@ public class AdjacencyList<Vertex: Hashable> {
     /**
      Returns an array of all vertices adjacent to a vertex.
 
+     Adjacent means reachable by exactly one edge crossing. The adjacency list
+     directly stores this information, so the operation is very fast.
+
      - parameter vertex: The vertex whose neighbors to retrieve.
 
      - returns: An array of all vertices adjacent to the given one.
@@ -160,12 +169,17 @@ public class AdjacencyList<Vertex: Hashable> {
         }
 
         return neighbors
+        // Is it dangerous to return a direct reference to this? People could
+        // change the adjacency list and break rules.
     }
 }
 
 /**
- An undirected adjacency list. Edges are symmetric - v is adjacent to u iff
- u is adjacent to v.
+ An undirected graph implemented as an adjacency list. Edges are symmetric,
+ meaning v is adjacent to u iff u is adjacent to v.
+
+ In implementation, this means that if u is in v's neighbor array, v must also
+ be in u's neighbor array, for any two vertices.
  */
 public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
                                                       UndirectedGraph {
@@ -178,28 +192,33 @@ public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
     /**
      A computed array of all the edges in the graph, as tuples of vertices.
 
+     since these graphs are undirected, it would be possible to duplicate every
+     edge in this array, since an undirected graph is technically a directed
+     graph with 2E edges, one in each direction. We chose the other behavior,
+     so if (u, v) is an edge in the graph it appears in this array as exactly
+     one of (u, v) and (v, u), arbitrarily.
+
      - Complexity: O(E)
      */
     public var edges: [(Vertex, Vertex)] {
-        get {
-            var result = [(Vertex, Vertex)]()
-            var visited = Set<Vertex>()
-            for (vertex, neighbors) in adjacencyList {
-                for neighbor in neighbors {
-                    if !visited.contains(neighbor) {
-                        result.append((vertex, neighbor))
-                    }
+        var result = [(Vertex, Vertex)]()
+        var visited = Set<Vertex>()
+        for (vertex, neighbors) in adjacencyList {
+            for neighbor in neighbors {
+                if !visited.contains(neighbor) {
+                    result.append((vertex, neighbor))
                 }
-                visited.insert(vertex)
             }
-            return result
+            visited.insert(vertex)
         }
+        return result
     }
 
     /**
      Adds a new edge between two vertices in the graph.
 
-     This is a symmetric operation in undirected graphs.
+     This is a symmetric operation in undirected graphs - each vertex is added
+     to the other's neighbors list. Order of parameters does not matter.
 
      - parameter from: One vertex of the desired edge.
      - parameter to: The other vertex of the edge.
@@ -207,7 +226,7 @@ public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
      - throws: `GraphError.VertexNotPresent` if either vertex is not in the
        graph.
 
-     - complexity: O(1)
+     - complexity: O(1) - I assume here that [].append() is O(1).
      */
     public func addEdge(from: Vertex, to: Vertex) throws {
         guard let _ = adjacencyList[from] else {
@@ -229,7 +248,8 @@ public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
      Removes an edge from one vertex to another.
 
      In undirected graphs, this is also symmetric. Order of the parameters
-     does not matter.
+     does not matter. Each vertex will be removed from the other's neighbors
+     list.
 
      - parameter from: The source of the edge to remove.
      - parameter to: The destination of the edge to remove.
@@ -249,6 +269,7 @@ public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
         guard neighborsFrom.contains(to) else {
             throw GraphError.EdgeNotPresent
         }
+
         removeFromArray(to, fromArr: &adjacencyList[from]!)
         removeFromArray(from, fromArr: &adjacencyList[to]!)
         // same as above, would like to use guard var, need to look for
@@ -260,6 +281,9 @@ public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
 /**
  Directed adjacency list. When using this class, source is different from
  destination vertex in an edge.
+
+ In other words, if u is in v's neighbor array, v may not be in u's unless the
+ antiparallel edge exists in the graph.
  */
 public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
                                                     DirectedGraph {
@@ -270,6 +294,8 @@ public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
 
     /**
      A computed array of all the edges in the graph, as tuples of vertices.
+
+     Source of the edge is the first element, so that (v, u) means v -> u.
 
      - complexity: O(E)
      */
@@ -292,6 +318,7 @@ public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
 
      - parameter from: the source vertex of the desired edge
      - parameter to: the destination vertex of the desired edge
+       in other words, the edge (from -> to) will be added
 
      - throws: `GraphError.VertexNotPresent` if either vertex is not in the
        graph.
@@ -336,10 +363,26 @@ public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
 
 /**
  Implementation of a weighted undirected graph using an adjacency list.
+
+ The weights are stored separately from the edges, in a dictionary of
+ dictionaries. Weights are Doubles.
  */
 final public class WeightedUndirectedAList<Vertex: Hashable> :
                 AdjacencyList<Vertex>, WeightedUndirectedGraph {
 
+    // Adding a vertex should add an empty entry to the outer weightTable?
+
+    /**
+     A dictionary of dictionaries that stores the weight of the vertices.
+
+     Accessed like weightTable[from][to] to get the weight of the edge
+     (from, to).
+
+     Currently each edge weight is stored as either weightTable[from][to] or
+     weightTable[to][from], based on the order of parameters when the edge is
+     added. So the weight of (v, u) might be in wT[v][u] or wT[u][v]. This
+     saves space but increases the complexity of some code.
+     */
     private var weightTable = [Vertex: [Vertex: Double]]()
 
     required public override init() {
@@ -370,11 +413,13 @@ final public class WeightedUndirectedAList<Vertex: Hashable> :
 
      - parameter to: The `source` of the desired edge.
      - parameter from: The `destination` of the desired edge.
+       Note: Since this is an undirected graph, the order of the parameters
+       does not matter. weight(from, to) == weight(to, from)
 
-     - returns: The weight associated with the given edge, a Double.
+     - returns: The weight associated with the given edge, a Double, or nil if
+       the edge is not in the graph.
 
-     - throws: `GraphError.VertexNotPresent` if either vertex not in the graph
-       or, `GraphError.EdgeNotPresent` if the edge does not exist in the graph.
+     - throws: `GraphError.VertexNotPresent` if either vertex not in the graph.
      */
     public func weight(from: Vertex, to: Vertex) throws -> Double? {
         guard adjacencyList[from] != nil else {
@@ -399,6 +444,7 @@ final public class WeightedUndirectedAList<Vertex: Hashable> :
      Currently, this will add a zero-weight edge.
 
      Probably don't use it when using a weighted adjacency list.
+
      */
     public func addEdge(from: Vertex, to: Vertex) throws {
         try addEdge(from, to: to, weight: 0.0)
@@ -461,5 +507,139 @@ final public class WeightedUndirectedAList<Vertex: Hashable> :
         } else {
             weightTable[to]!.removeValueForKey(from)
         }
+    }
+}
+
+/**
+ A weighted directed Adjacency List implementation of weighted, directed
+ graphs. Similar to the WeightedUndirected adjacency list, but with asymmetric
+ edges.
+
+ Weights are stored separately from edges, in a nested dictionary of type
+ [Vertex: [Vertex: Double]].
+ */
+final public class WeightedDirectedAList<Vertex: Hashable> :
+                AdjacencyList<Vertex>, WeightedDirectedGraph {
+    
+    /**
+     A nested dictionary stores the weight of each edge, and is accessed like
+     weightTable[from][to]. Direction matters in this class, so that is the
+     weight of the edge from -> to.
+     */
+    private var weightTable = [Vertex: [Vertex: Double]]()
+
+    required public override init() {
+        super.init()
+    }
+
+    /**
+     A computed property which is an array of edges in the graph, represented
+     as (Vertex, Vertex) tuples. Read-only.
+     */
+    public var edges: [(Vertex, Vertex)] {
+        var result = [(Vertex, Vertex)]()
+        for (vertex, neighbors) in adjacencyList {
+            for neighbor in neighbors {
+                result.append((vertex, neighbor))
+            }
+        }
+        return result
+    }
+
+    /**
+     Computes the weight associated with the given edge, by looking it up
+     in the weight table.
+
+     Like other methods on directed graphs, the order of the parameters is
+     important. weight(from, to) may exist while weight(to, from) is nil.
+
+     - parameter from: the source vertex of the desired edge.
+     - parameter to: the destination vertex of the desired edge.
+
+     - returns: The weight of the edge (from -> to), a Double, or nil if the
+       edge does not exist in the graph.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex doesn't exist.
+     */
+    public func weight(from: Vertex, to: Vertex) throws -> Double? {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard adjacencyList[to] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+
+        return weightTable[from]?[to]
+    }
+
+    /**
+     Adds a new edge of unspecified weight to the graph.
+
+     Required to satisfy graph protocol - this is bad.
+     Currently, this adds a zero-weight edge.
+    
+     Probably don't use it with weighted adjacency lists.
+     */
+    public func addEdge(from: Vertex, to: Vertex) throws {
+        try addEdge(from, to: to, weight: 0.0)
+    }
+
+    /**
+     Adds a new weighted edge to the graph from one vertex to another.
+
+     Changes the graph in-place to add the weighted edge.
+
+     - parameter from: The source of the edge to add.
+     - parameter to: The source of the edge to add.
+     - parameter weight: The weight of the egde to add, a double.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex doesn't exist.
+     */
+    public func addEdge(from: Vertex, to: Vertex, weight: Double) throws {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard adjacencyList[to] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        adjacencyList[from]!.append(to)
+
+        if weightTable[from] == nil {
+            weightTable[from] = [to: weight]
+        } else {
+            weightTable[from]![to] = weight
+        }
+    }
+
+    /**
+     Remove an edge between two given vertices in the graph.
+
+     - parameter from: The source of the edge to remove.
+     - parameter to: The destination of the edge to remove.
+     Not interchangable. This removes (from -> to) but doesn't touch the edge
+     (to -> from).
+
+     - throws: `GraphError.VertexNotPresent if those vertices don't exist,
+       and `GraphError.EdgeNotPresent` if the edge doesn't exist.
+     */
+    public func removeEdge(from: Vertex, to: Vertex) throws {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard let neighborsTo = adjacencyList[to] else {
+            throw GraphError.VertexNotPresent
+        }
+        guard neighborsTo.contains(from) else {
+            throw GraphError.EdgeNotPresent
+        }
+        guard weightTable[from]?[to] != nil else {
+            throw GraphError.EdgeNotPresent
+            // This is even worse than just edge not present, because it means
+            // the edge exists in the adjacencyList but not the weight table.
+        }
+
+        removeFromArray(to, fromArr: &adjacencyList[from]!)
+
+        weightTable[from]!.removeValueForKey(to)
     }
 }
