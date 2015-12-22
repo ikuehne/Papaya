@@ -54,6 +54,8 @@ private func buildBFSParentDict<G: Graph, V: Hashable where V == G.Vertex>(
     var current: V
     var result = [V: V]()
     queue.enqueue(start)
+    visited.insert(start)
+    result[start] = start
     while !queue.isEmpty {
         current = queue.dequeue()
         let neighbors = try! graph.neighbors(current)
@@ -61,9 +63,9 @@ private func buildBFSParentDict<G: Graph, V: Hashable where V == G.Vertex>(
             if !visited.contains(neighbor) {
                 queue.enqueue(neighbor)
                 result[neighbor] = current
+                visited.insert(neighbor)
             }
         }
-        visited.insert(current)
     }
 
     return result
@@ -83,14 +85,23 @@ func breadthFirstPath<G: Graph, V: Hashable where V == G.Vertex>(
                                         graph: G, start: V, end: V) -> [V]? {
     let parentsDictionary = buildBFSParentDict(graph, start: start)
     var result: [V] = [end]
+
+    if end == start {
+        return result
+    }
+
     if let first = parentsDictionary[end] {
         var current = first
         while current != start {
             result.insert(current, atIndex: 0)
             current = parentsDictionary[current]!
         }
+    } else {
+        return nil
     }
     result.insert(start, atIndex: 0)
 
     return result
 }
+// Idea- When lots of shortest paths queries are expected, there should be a
+// way to store the parentsDictionary so it's only computed once.
