@@ -44,7 +44,10 @@ public protocol Graph {
 
      - parameter vertices: A collection of vertices to include initially.
     */
-    init<V: CollectionType where V.Generator.Element == Vertex> (vertices: V)
+    //init<V: CollectionType where V.Generator.Element == Vertex> (vertices: V)
+    // Maybe shouldn't be required?
+    // Default implementation may be good enough without requiring adopters
+    // of the protocol to provide their own?
 
     /**
      Initializes a graph with the same vertices and edges as the given graph.
@@ -54,7 +57,7 @@ public protocol Graph {
 
      - parameter graph: The graph to copy.
     */
-    init<G: Graph where G.Vertex == Vertex>(graph: G)
+    //init<G: Graph where G.Vertex == Vertex>(graph: G)
 
     /**
      An array of all the vertices in the graph.
@@ -154,7 +157,7 @@ public protocol UndirectedGraph: Graph { }
  Description of a directed graph.
 
  This protocol is identical to Graph and UndirectedGraph, but new types should
- implement this protocol if the `edgeExists` function is not reflexive, i.e. if
+ implement this protocol with the `edgeExists` function not reflexive, i.e. if
  the edges have an associated direction.
 */
 public protocol DirectedGraph: Graph { }
@@ -184,8 +187,8 @@ public protocol WeightedGraph: Graph {
 
      Changes the graph in-place to add the edge.
 
-     - parameter to: The 'source' of the edge to use.
-     - parameter from: The 'destination' of the edge to use.
+     - parameter from: The 'source' of the edge to use.
+     - parameter to: The 'destination' of the edge to use.
      - parameter weight: The 'weight' of the new edge to add.
 
      - throws: `GraphError.VertexNotPresent` if either vertex in the edge
@@ -194,16 +197,31 @@ public protocol WeightedGraph: Graph {
     mutating func addEdge(from: Vertex, to: Vertex, weight: Double) throws
 }
 
+/**
+ A weighted undirected graph protocol.
+
+ This protocol is identical to a weighted graph, but it requires that the
+ implementation of `edgeExists` be symmetric, i.e. edges go both ways.
+ */
+public protocol WeightedUndirectedGraph : WeightedGraph {}
+
+/**
+ A weighted directed graph protocol.
+
+ This protocol is idential to a weighted graph, but it requires that the
+ implementation of `edgeExists` not be symmetric, i.e. edges go in only one
+ direction
+ */
+public protocol WeightedDirectedGraph : WeightedGraph {}
+
 // Provides a default implementation for the `neighbors` function.
 public extension Graph {
     public init<V: CollectionType
                 where V.Generator.Element == Vertex> (vertices: V) {
         self = Self()
         for vertex in vertices {
-            do {
-                try addVertex(vertex)
-            // If a vertex is duplicated, just ignore it.
-            } catch { }
+            try? addVertex(vertex)
+            // I believe this is a no-op if it throws.
         }
     }
 

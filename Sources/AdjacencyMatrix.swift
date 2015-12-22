@@ -360,17 +360,15 @@ final public class UndirectedAMatrix<Vertex: Hashable>: AdjacencyMatrix<Vertex>,
      - complexity: O(V²)
     */
     public var edges: [(Vertex, Vertex)] {
-        get {
-            var result = [(Vertex, Vertex)]()
-            for row in 0..<size {
-                for col in row..<size {
-                    if matrix[row, col] == 1{
-                        result.append((indexMap[row]!, indexMap[col]!))
-                    }
+        var result = [(Vertex, Vertex)]()
+        for row in 0..<size {
+            for col in row..<size {
+                if matrix[row, col] == 1{
+                    result.append((indexMap[row]!, indexMap[col]!))
                 }
             }
-            return result
         }
+        return result
     }
 
     /**

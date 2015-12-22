@@ -81,6 +81,9 @@ public class AdjacencyList<Vertex: Hashable> {
      */
     public func addVertex(vertex: Vertex) throws {
         if let _ = adjacencyList[vertex] {
+            // The Swift Programming Language book seems to prefer the pattern
+            // `if <something> != nil` to this optional binding to the empty
+            // pattern.
             throw GraphError.VertexAlreadyPresent
         }
         else {
@@ -164,12 +167,13 @@ public class AdjacencyList<Vertex: Hashable> {
  An undirected adjacency list. Edges are symmetric - v is adjacent to u iff
  u is adjacent to v.
  */
-final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
+public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
                                                       UndirectedGraph {
 
     required public override init() {
         super.init()
     }
+
 
     /**
      A computed array of all the edges in the graph, as tuples of vertices.
@@ -257,7 +261,7 @@ final public class UndirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
  Directed adjacency list. When using this class, source is different from
  destination vertex in an edge.
  */
-final public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
+public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
                                                     DirectedGraph {
     
     required public override init() {
@@ -280,12 +284,6 @@ final public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
             return result
         }
     }
-
-    // edgeExists function is the same in directed and undirected ALists -
-    // move to general AdjacencyList.
-
-    // neighbors function is the same in directed and undirected ALists -
-    // also move to general AdjacencyList.
 
     /**
      Adds a new edge from one vertex to another in the graph.
@@ -332,5 +330,136 @@ final public class DirectedAList<Vertex: Hashable>: AdjacencyList<Vertex>,
             throw GraphError.EdgeNotPresent
         }
         removeFromArray(to, fromArr: &adjacencyList[from]!)
+    }
+}
+
+
+/**
+ Implementation of a weighted undirected graph using an adjacency list.
+ */
+final public class WeightedUndirectedAList<Vertex: Hashable> :
+                AdjacencyList<Vertex>, WeightedUndirectedGraph {
+
+    private var weightTable = [Vertex: [Vertex: Double]]()
+
+    required public override init() {
+        super.init()
+    }
+
+    /**
+     Computed property which is an array of edges in the graph, represented as
+     (Vertex, Vertex) tuples. Read-only.
+     */
+    public var edges: [(Vertex, Vertex)] {
+        var result = [(Vertex, Vertex)]()
+        var visited = Set<Vertex>()
+        for (vertex, neighbors) in adjacencyList {
+            for neighbor in neighbors {
+                if !visited.contains(neighbor) {
+                    result.append((vertex, neighbor))
+                }
+            }
+            visited.insert(vertex)
+        }
+        return result
+    }
+
+
+    /**
+     Computes the weight associated with the given edge.
+
+     - parameter to: The `source` of the desired edge.
+     - parameter from: The `destination` of the desired edge.
+
+     - returns: The weight associated with the given edge, a Double.
+
+     - throws: `GraphError.VertexNotPresent` if either vertex not in the graph
+       or, `GraphError.EdgeNotPresent` if the edge does not exist in the graph.
+     */
+    public func weight(from: Vertex, to: Vertex) throws -> Double? {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard adjacencyList[to] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        let result1 = weightTable[from]?[to]
+        let result2 = weightTable[to]?[from]
+        
+        if result1 == nil {
+            return result2
+        }
+        return result1
+    }
+
+    /**
+     Adds a new edge of unspecified weight to the graph.
+
+     Required to satisfy graph protocol - this is bad.
+     Currently, this will add a zero-weight edge.
+
+     Probably don't use it when using a weighted adjacency list.
+     */
+    public func addEdge(from: Vertex, to: Vertex) throws {
+        try addEdge(from, to: to, weight: 0.0)
+    }
+
+    /**
+     Adds a new weighted edge to the graph from one vertex to another.
+
+     Changes the graph in-place to add the weighted edge.
+
+     - parameter from: The `source` of the edge to add
+     - parameter to: The  `destination` of the edge to add
+     - parameter weight: The `weight` of the edge to add
+
+     - throws: `GraphError.VertexNotPresent` if either vertex does not exist
+       in the graph.
+     */
+    public func addEdge(from: Vertex, to: Vertex, weight: Double) throws {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard adjacencyList[to] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        adjacencyList[from]!.append(to)
+        adjacencyList[to]!.append(from)
+        if weightTable[from] == nil {
+            weightTable[from] = [to: weight]
+        } else {
+            weightTable[from]![to] = weight
+        }
+    }
+
+    /**
+     Remove an edge between two given vertices in the graph.
+
+     - parameter from: the `source` of the edge.
+     - parameter to: the `destination` of the edge to remove.
+     These are interchangable in the undirected graph here.
+
+     - throws: `GraphError.VertexNotPresent` if those vertices don't exist,
+       and `GraphError.EdgeNotPresent` if the edge doesn't exist.
+     */
+    public func removeEdge(from: Vertex, to: Vertex) throws {
+        guard adjacencyList[from] != nil else {
+            throw GraphError.VertexNotPresent
+        }
+        guard let neighborsTo = adjacencyList[to] else {
+            throw GraphError.VertexNotPresent
+        }
+        guard neighborsTo.contains(from) else {
+            throw GraphError.EdgeNotPresent
+        }
+
+        removeFromArray(to, fromArr: &adjacencyList[from]!)
+        removeFromArray(from, fromArr: &adjacencyList[to]!)
+
+        if weightTable[from]![to] != nil {
+            weightTable[from]!.removeValueForKey(to)
+        } else {
+            weightTable[to]!.removeValueForKey(from)
+        }
     }
 }
