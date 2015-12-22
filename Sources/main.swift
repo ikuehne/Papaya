@@ -26,6 +26,8 @@ try! graph.addVertex("Ian Kuehne")
 
 print(graph.vertices)
 
+try! graph.addEdge("Ian Kuehne", to: "Natalie Portman")
+
 do {
     try graph.addVertex("Ian Kuehne")
 } catch {
@@ -38,3 +40,9 @@ print(graph2.vertices)
 print(graph2.edges)
 print(graph.vertices)
 print(graph.edges)
+
+// A really basic BFS test
+let path = breadthFirstPath(graph, start: "Ian Kuehne", end: "Kevin Bacon")
+print(path)
+
+// Some things to test with BFS - multiple non-optimal paths, no path exists.
