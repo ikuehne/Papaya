@@ -44,8 +44,10 @@ print(graph.edges)
 // A really basic BFS test
 let path = breadthFirstPath(graph, start: "Ian Kuehne", end: "Kevin Bacon")
 print(path)
+This stuff all works
 */
 // Some things to test with BFS - multiple non-optimal paths, no path exists.
+/*
 // Creating a more complicated test graph
 let intVerts = 1...10
 var intGraphList = UndirectedAList(vertices: intVerts)
@@ -86,5 +88,26 @@ pathList = breadthFirstPath(intGraphMatrix, start: 10, end: 2)
 print("shortest path from 10 to 2 is \(pathList) - should be 3 edges")
 pathList = breadthFirstPath(intGraphMatrix, start: 10, end: 10)
 print("shortest path from 10 to itself is \(pathList)")
+// this stuff all works
+*/
 
+var items = [18, 5, 2, 4, 9, 16, 35, 34]
+// remember to test on repeated values
+var heap = PriorityHeap<Int>(compare: <=)
+for item in items {
+    heap.insert(item)
+}
+var current = heap.peek()
+print("printing first queue")
+while current != nil {
+    current = heap.extract()
+    print(current)
+}
 
+print("printing second queue")
+var nextHeap = PriorityHeap<Int>(items: items, compare: <)
+current = nextHeap.peek()
+while current != nil {
+    current = nextHeap.extract()
+    print(current)
+}

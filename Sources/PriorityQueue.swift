@@ -96,8 +96,11 @@ public struct PriorityHeap<T>: PriorityQueue {
      - parameter compare: A comparison function over pairs of elements.
      */
     public init(items: [T], compare: (T, T) -> Bool) {
-        heap = items
         self.compare = compare
+        heap = items
+        for i in (0...(items.count / 2)).reverse() {
+            heapify(i)
+        }
     }
 
     /**
@@ -157,8 +160,8 @@ public struct PriorityHeap<T>: PriorityQueue {
         }
 
         heap[i] = toKey
-        while i > 0 && compare(heap[parent(i)], heap[i]) {
-            var temp = heap[i]
+        while i > 0 && compare(heap[i], heap[parent(i)]) {
+            let temp = heap[i]
             heap[i] = heap[parent(i)]
             heap[parent(i)] = temp
             i = parent(i)
@@ -173,6 +176,18 @@ public struct PriorityHeap<T>: PriorityQueue {
      */
     public mutating func insert(item: T) {
         heap.append(item)
+        var i = heap.count - 1
+
+        // repeated code - CLRS first makes the priority of the new element
+        // -infinity, then increases its priority, but infinity priority
+        // is not well-defined for this general case.
+
+        while i > 0 && compare(heap[i], heap[parent(i)]) {
+            let temp = heap[i]
+            heap[i] = heap[parent(i)]
+            heap[parent(i)] = temp
+            i = parent(i)
+        }
     }
 
     /**
@@ -193,6 +208,21 @@ public struct PriorityHeap<T>: PriorityQueue {
         return top
     }
 
-    private mutating func heapify(index: Int) {
+    private mutating func heapify(i: Int) {
+        let l = leftChild(i)
+        let r = rightChild(i)
+        var largest = i
+        if l < heap.count && compare(heap[l], heap[i]) {
+            largest = l
+        }
+        if r < heap.count && compare(heap[r], heap[largest]) {
+            largest = r
+        }
+        if largest != i {
+            let temp = heap[i]
+            heap[i] = heap[largest]
+            heap[largest] = temp
+            heapify(largest)
+        }
     }
 }
