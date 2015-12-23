@@ -81,7 +81,7 @@ private func buildBFSParentDict<G: Graph, V: Hashable where V == G.Vertex>(
  - returns: An optional array that gives the shortest path from start to end.
    returns nil if no such path exists.
  */
-func breadthFirstPath<G: Graph, V: Hashable where V == G.Vertex>(
+public func breadthFirstPath<G: Graph, V: Hashable where V == G.Vertex>(
                                         graph: G, start: V, end: V) -> [V]? {
     let parentsDictionary = buildBFSParentDict(graph, start: start)
     var result: [V] = [end]
@@ -105,3 +105,62 @@ func breadthFirstPath<G: Graph, V: Hashable where V == G.Vertex>(
 }
 // Idea- When lots of shortest paths queries are expected, there should be a
 // way to store the parentsDictionary so it's only computed once.
+
+private struct WeightedEdge<Vertex> {
+    let from: Vertex
+    let to: Vertex
+    let weight: Double
+}
+
+/**
+ Runs Prim's algorithm on a weighted undirected graph.
+ 
+ - parameter graph: A weighted undirected graph for which to create a minimum
+   spanning tree.
+
+ - returns: A minimum spanning tree of the input graph.
+ */
+public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
+                                                        graph: G) -> G {
+
+    var tree = G()
+    var addedVerts = Set<G.Vertex>()
+    
+    var queue = PriorityHeap<WeightedEdge<G.Vertex>>()
+    { $0.weight < $1.weight }
+
+    let firstVertex = graph.vertices[0]
+    try! tree.addVertex(firstVertex)
+    addedVerts.insert(firstVertex)
+
+    for neighbor in try! graph.neighbors(firstVertex) {
+        let weight = try! graph.weight(firstVertex, to: neighbor)
+        queue.insert(WeightedEdge<G.Vertex>(from: firstVertex, to: neighbor,
+                            weight: weight!))
+    }
+
+    var currentEdge: WeightedEdge<G.Vertex>
+    let target = graph.vertices.count
+
+    // currently, vertices is computed many times for each graph.
+    // trade some space for time and store sets of vertices?
+    while addedVerts.count < target {
+        repeat {
+            currentEdge = queue.extract()!
+        } while addedVerts.contains(currentEdge.to)
+        // can cause infinite loop?
+
+        try! tree.addVertex(currentEdge.to)
+        try! tree.addEdge(currentEdge.from, to: currentEdge.to,
+                          weight: currentEdge.weight)
+        addedVerts.insert(currentEdge.to)
+        for neighbor in try! graph.neighbors(currentEdge.to) {
+            let weight = try! graph.weight(currentEdge.to, to: neighbor)
+            queue.insert(WeightedEdge<G.Vertex>(from: currentEdge.to,
+                                    to: neighbor, weight: weight!))
+        }
+    }
+
+    return tree
+
+}

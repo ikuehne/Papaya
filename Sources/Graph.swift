@@ -168,6 +168,7 @@ public protocol DirectedGraph: Graph { }
  Weighted graphs have a weight associated with each edge.
 */
 public protocol WeightedGraph: Graph {
+
     /**
      Computes the weight associated with the given edge.
 
@@ -220,7 +221,7 @@ public extension Graph {
                 where V.Generator.Element == Vertex> (vertices: V) {
         self = Self()
         for vertex in vertices {
-            try? addVertex(vertex)
+            let _ = try? addVertex(vertex)
             // I believe this is a no-op if it throws.
         }
     }
@@ -246,3 +247,25 @@ public extension Graph {
         return neighbors
     }
 }
+
+/**
+ Gives the total weight of all edges in the graph. Useful for minimum
+ spanning trees and setting an effectively infinite weight value in some
+ graph algorithms.
+
+ A default implementaion using the edges property and weight method is
+ provided here.
+
+ - returns: the sum of all of the edge weights in the graph, a Double.
+ */
+public extension WeightedGraph {
+    public var totalWeight: Double {
+        var result = 0.0
+        for (from, to) in edges {
+            result += try! weight(from, to: to)!
+        }
+        return result
+    }
+}
+
+

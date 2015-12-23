@@ -90,7 +90,7 @@ pathList = breadthFirstPath(intGraphMatrix, start: 10, end: 10)
 print("shortest path from 10 to itself is \(pathList)")
 // this stuff all works
 */
-
+/*
 var items = [18, 5, 2, 4, 9, 16, 35, 34]
 // remember to test on repeated values
 var heap = PriorityHeap<Int>(compare: <=)
@@ -111,3 +111,26 @@ while current != nil {
     current = nextHeap.extract()
     print(current)
 }
+*/
+
+// create the example graph in the caltech math 6 spanning trees lecture
+let vertices = ["r", "a", "b", "c", "d", "e"]
+var graph = WeightedUndirectedAList<String>(vertices: vertices)
+try! graph.addEdge("r", to: "a", weight: 3.0)
+try! graph.addEdge("r", to: "b", weight: 2.0)
+try! graph.addEdge("a", to: "b", weight: 2.0)
+try! graph.addEdge("a", to: "c", weight: 4.0)
+try! graph.addEdge("b", to: "c", weight: 3.0)
+try! graph.addEdge("b", to: "e", weight: 5.0)
+try! graph.addEdge("c", to: "d", weight: 8.0)
+try! graph.addEdge("e", to: "d", weight: 5.0)
+
+print(try! graph.weight("c", to: "d"))
+print(try! graph.weight("b", to: "c"))
+print(try! graph.weight("b", to: "d"))
+
+let mst = primsSpanningTree(graph)
+print("minimum spanning tree:")
+print(mst.vertices)
+print(mst.edges)
+print(mst.totalWeight)
