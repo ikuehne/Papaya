@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DirectedAMatrix Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/DirectedAMatrix" class="dashAnchor"></a>
+    <a title="DirectedAMatrix Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        DirectedAMatrix Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/WeightedUndirectedAList.html">WeightedUndirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdjacencyMatrix.html">AdjacencyMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DirectedAList.html">DirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DirectedAMatrix.html">DirectedAMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UndirectedAList.html">UndirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UndirectedAMatrix.html">UndirectedAMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/WeightedDirectedAList.html">WeightedDirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdjacencyList.html">AdjacencyList</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/GraphError.html">GraphError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/HeapError.html">HeapError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6Papaya16breadthFirstPathu0_Rq_S_5Graphqq_S0_6VertexSs8Hashablezq0_qq_S0_6Vertex_FTq_5startq0_3endq0__GSqGSaq0___">breadthFirstPath(_:start:end:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6Papaya17primsSpanningTreeuRq_S_13WeightedGraphqq_S_5Graph6VertexSs8Hashable_Fq_q_">primsSpanningTree(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya15UndirectedGraph">UndirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Graph.html">Graph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/PriorityQueue.html">PriorityQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya13DirectedGraph">DirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya21WeightedDirectedGraph">WeightedDirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/WeightedGraph.html">WeightedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya23WeightedUndirectedGraph">WeightedUndirectedGraph</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/PriorityHeap.html">PriorityHeap</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>DirectedAMatrix</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">final</span> <span class="kd">public</span> <span class="kd">class</span> <span class="kt">DirectedAMatrix</span><span class="o">&lt;</span><span class="kt">Vertex</span><span class="p">:</span> <span class="kt">Hashable</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">AdjacencyMatrix</span><span class="o">&lt;</span><span class="kt">Vertex</span><span class="o">&gt;</span><span class="p">,</span>
+                                                      <span class="kt">DirectedGraph</span></code></pre>
+
+                </div>
+              </div>
+            <p>Adjacency matrices for directed graphs.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15DirectedAMatrixcuRq_Ss8Hashable_FMGS0_q__FT_GS0_q__"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15DirectedAMatrixcuRq_Ss8Hashable_FMGS0_q__FT_GS0_q__">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">final</span> <span class="kd">public</span> <span class="kd">class</span> <span class="kt">DirectedAMatrix</span><span class="o">&lt;</span><span class="kt">Vertex</span><span class="p">:</span> <span class="kt">Hashable</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">AdjacencyMatrix</span><span class="o">&lt;</span><span class="kt">Vertex</span><span class="o">&gt;</span><span class="p">,</span>
+                                                      <span class="kt">DirectedGraph</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6Papaya15DirectedAMatrix5edgesGSaTq_q___"></a>
+                    <a name="//apple_ref/swift/Property/edges" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6Papaya15DirectedAMatrix5edgesGSaTq_q___">edges</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An array of all the edges in the graph, represented as tuples of vertices.</p>
+
+<p>The first vertex in each tuple is the source of the edge, and the second is
+the destination.</p>
+
+<div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          O(V²)
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">edges</span><span class="p">:</span> <span class="p">[(</span><span class="kt">Vertex</span><span class="p">,</span> <span class="kt">Vertex</span><span class="p">)]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15DirectedAMatrix10edgeExistsuRq_Ss8Hashable_FGS0_q__FzTq_2toq__Sb"></a>
+                    <a name="//apple_ref/swift/Method/edgeExists(_:to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15DirectedAMatrix10edgeExistsuRq_Ss8Hashable_FGS0_q__FzTq_2toq__Sb">edgeExists(_:to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns whether there is an edge from one vertex to another in the graph.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError16VertexNotPresentFMS0_S0_">GraphError.VertexNotPresent</a></code> if either vertex is not in the
+graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(1)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">edgeExists</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The vertex to check from.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The destination vertex.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the edge exists; <code>false</code> otherwise.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15DirectedAMatrix9neighborsuRq_Ss8Hashable_FGS0_q__Fzq_GSaq__"></a>
+                    <a name="//apple_ref/swift/Method/neighbors(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15DirectedAMatrix9neighborsuRq_Ss8Hashable_FGS0_q__Fzq_GSaq__">neighbors(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an array of all vertices reachable in one step from a vertex.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError16VertexNotPresentFMS0_S0_">GraphError.VertexNotPresent</a></code> if <code>vertex</code> is not in the graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(V)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">neighbors</span><span class="p">(</span><span class="nv">vertex</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Vertex</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>vertex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The vertex whose neighbors to retrieve.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An array of all vertices with edges from <code>vertex</code> to them, in no particular order, and not including <code>vertex</code> unless there is a loop.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15DirectedAMatrix7addEdgeuRq_Ss8Hashable_FGS0_q__FzTq_2toq__T_"></a>
+                    <a name="//apple_ref/swift/Method/addEdge(_:to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15DirectedAMatrix7addEdgeuRq_Ss8Hashable_FGS0_q__FzTq_2toq__T_">addEdge(_:to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds a new edge from one edge to another.</p>
+
+<p>Changes the graph in-place to add the edge.  The new edge will go from
+<code>from</code> to <code>to</code>.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError16VertexNotPresentFMS0_S0_">GraphError.VertexNotPresent</a></code> if either vertex is not in the
+graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(1)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addEdge</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The &lsquo;source&rsquo; of the edge.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The &lsquo;destination&rsquo; of the edge.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15DirectedAMatrix10removeEdgeuRq_Ss8Hashable_FGS0_q__FzTq_2toq__T_"></a>
+                    <a name="//apple_ref/swift/Method/removeEdge(_:to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15DirectedAMatrix10removeEdgeuRq_Ss8Hashable_FGS0_q__FzTq_2toq__T_">removeEdge(_:to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes an edge from one vertex to another.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError14EdgeNotPresentFMS0_S0_">GraphError.EdgeNotPresent</a></code> if the edge to be removed is not in
+the graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(1)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeEdge</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>from</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The &lsquo;source&rsquo; of the edge.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The &lsquo;destination&rsquo; of the edge.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2015 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2015-12-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
