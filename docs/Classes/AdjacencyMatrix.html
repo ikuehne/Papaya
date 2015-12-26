@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AdjacencyMatrix Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/AdjacencyMatrix" class="dashAnchor"></a>
+    <a title="AdjacencyMatrix Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (84% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        AdjacencyMatrix Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/WeightedUndirectedAList.html">WeightedUndirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdjacencyMatrix.html">AdjacencyMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DirectedAList.html">DirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DirectedAMatrix.html">DirectedAMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UndirectedAList.html">UndirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UndirectedAMatrix.html">UndirectedAMatrix</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/WeightedDirectedAList.html">WeightedDirectedAList</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AdjacencyList.html">AdjacencyList</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/GraphError.html">GraphError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/HeapError.html">HeapError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6Papaya16breadthFirstPathu0_Rq_S_5Graphqq_S0_6VertexSs8Hashablezq0_qq_S0_6Vertex_FTq_5startq0_3endq0__GSqGSaq0___">breadthFirstPath(_:start:end:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:F6Papaya17primsSpanningTreeuRq_S_13WeightedGraphqq_S_5Graph6VertexSs8Hashable_Fq_q_">primsSpanningTree(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya15UndirectedGraph">UndirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Graph.html">Graph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/PriorityQueue.html">PriorityQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya13DirectedGraph">DirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya21WeightedDirectedGraph">WeightedDirectedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/WeightedGraph.html">WeightedGraph</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:P6Papaya23WeightedUndirectedGraph">WeightedUndirectedGraph</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/PriorityHeap.html">PriorityHeap</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>AdjacencyMatrix</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AdjacencyMatrix</span><span class="o">&lt;</span><span class="kt">Vertex</span><span class="p">:</span> <span class="kt">Hashable</span><span class="o">&gt;</span></code></pre>
+
+                </div>
+              </div>
+            <p>Adjacency matrices for general graphs.</p>
+
+<p>The <code>AdjacencyMatrix</code> class is only capable of keeping track of the size and
+shape of the matrix.  To use adjacency matrices as graphs, use its subclasses,
+UndirectedAMatrix and DirectedAMatrix.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15AdjacencyMatrixcu__Rq_Ss8Hashableqd__Ss14CollectionTypezq_qqqd__S2_9GeneratorSs13GeneratorType7Element_FMGS0_q__FT8verticesqd___GS0_q__"></a>
+                    <a name="//apple_ref/swift/Method/init(vertices:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15AdjacencyMatrixcu__Rq_Ss8Hashableqd__Ss14CollectionTypezq_qqqd__S2_9GeneratorSs13GeneratorType7Element_FMGS0_q__FT8verticesqd___GS0_q__">init(vertices:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer that takes a collection of vertices, and starts with no edges.</p>
+
+<div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(<code>vertices.count</code>²)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">required</span> <span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">V</span><span class="p">:</span> <span class="kt">CollectionType</span>
+                <span class="k">where</span> <span class="kt">V</span><span class="o">.</span><span class="kt">Generator</span><span class="o">.</span><span class="kt">Element</span> <span class="o">==</span> <span class="kt">Vertex</span><span class="o">&gt;</span> <span class="p">(</span><span class="nv">vertices</span><span class="p">:</span> <span class="kt">V</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>vertices</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A collection of vertices to include initially.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15AdjacencyMatrixcuRq_Ss8Hashable_FMGS0_q__FT_GS0_q__"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15AdjacencyMatrixcuRq_Ss8Hashable_FMGS0_q__FT_GS0_q__">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Empty initializer.</p>
+
+<p>This initializer is not recommended for large graphs, because adding
+vertices to an existing graph is an expensive operation.</p>
+
+<div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          O(1)
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">required</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC6Papaya15AdjacencyMatrix8verticesGSaq__"></a>
+                    <a name="//apple_ref/swift/Property/vertices" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC6Papaya15AdjacencyMatrix8verticesGSaq__">vertices</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A computed array of all the vertices in the graph.</p>
+
+<div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          O(V)
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">final</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">vertices</span><span class="p">:</span> <span class="p">[</span><span class="kt">Vertex</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15AdjacencyMatrix9addVertexuRq_Ss8Hashable_FGS0_q__Fzq_T_"></a>
+                    <a name="//apple_ref/swift/Method/addVertex(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15AdjacencyMatrix9addVertexuRq_Ss8Hashable_FGS0_q__Fzq_T_">addVertex(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Adds a new vertex to the graph with no edges connected to it.</p>
+
+<p>Changes the graph in-place to add the vertex.  Note that this is a very
+slow operation on adjacency matrices; it is better to create the matrix
+with all needed vertices.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError20VertexAlreadyPresentFMS0_S0_">GraphError.VertexAlreadyPresent</a></code> if <code>vertex</code> is already in the
+graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(V²)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">final</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">addVertex</span><span class="p">(</span><span class="nv">vertex</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>vertex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The vertex to add.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC6Papaya15AdjacencyMatrix12removeVertexuRq_Ss8Hashable_FGS0_q__Fzq_T_"></a>
+                    <a name="//apple_ref/swift/Method/removeVertex(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC6Papaya15AdjacencyMatrix12removeVertexuRq_Ss8Hashable_FGS0_q__Fzq_T_">removeVertex(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Removes a vertex and all edges connected to it.</p>
+
+<p>Note that this is a very slow operation on adjacency matrices.</p>
+
+<div class="aside aside-throws">
+          <p class="aside-title">Throws</p>
+          <p><code><a href="../Enums/GraphError.html#/s:FO6Papaya10GraphError16VertexNotPresentFMS0_S0_">GraphError.VertexNotPresent</a></code> if the vertex to be deleted is not
+in the graph.</p>
+
+        </div><div class="aside aside-complexity">
+          <p class="aside-title">Complexity</p>
+          <p>O(V²)</p>
+
+        </div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">final</span> <span class="kd">public</span> <span class="kd">func</span> <span class="nf">removeVertex</span><span class="p">(</span><span class="nv">vertex</span><span class="p">:</span> <span class="kt">Vertex</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>vertex</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The vertex to remove.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2015 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2015-12-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.4.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
