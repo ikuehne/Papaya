@@ -134,9 +134,9 @@ public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
     addedVerts.insert(firstVertex)
 
     for neighbor in try! graph.neighbors(firstVertex) {
-        let weight = try! graph.weight(firstVertex, to: neighbor)
+        let weight = try! graph.weight(firstVertex, to: neighbor)!
         queue.insert(WeightedEdge<G.Vertex>(from: firstVertex, to: neighbor,
-                            weight: weight!))
+                            weight: weight))
     }
 
     var currentEdge: WeightedEdge<G.Vertex>
@@ -164,3 +164,17 @@ public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
     return tree
 
 }
+
+private func dijkstraParentDict<G: WeightedGraph,
+            V: Hashable where G.Vertex == V>(graph: G, start: V) -> [V: V] {
+    var queue = PriorityHeap<WeightedEdge<G.Vertex>>()
+    { $0.weight < $1.weight }
+
+    for neighbor in graph.neighbors(start) {
+        let weight = try! graph.weight(start, to: neighbor)!
+        queue.insert(WeightedEdge<V>(from: start, to: neighbor,
+                                     weight: weight))
+    }
+
+    while !queue.isEmpty {
+        // Take the 
