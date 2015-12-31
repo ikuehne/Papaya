@@ -106,6 +106,10 @@ public func breadthFirstPath<G: Graph, V: Hashable where V == G.Vertex>(
 // Idea- When lots of shortest paths queries are expected, there should be a
 // way to store the parentsDictionary so it's only computed once.
 
+/**
+ A structure describing a weighted edge. Prim's algorithm priority queue
+ holds these.
+ */
 private struct WeightedEdge<Vertex> {
     let from: Vertex
     let to: Vertex
@@ -149,6 +153,7 @@ public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
             currentEdge = queue.extract()!
         } while addedVerts.contains(currentEdge.to)
         // can cause infinite loop?
+        // can cause unwrapping of nil?
 
         try! tree.addVertex(currentEdge.to)
         try! tree.addEdge(currentEdge.from, to: currentEdge.to,
@@ -165,16 +170,87 @@ public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
 
 }
 
-private func dijkstraParentDict<G: WeightedGraph,
-            V: Hashable where G.Vertex == V>(graph: G, start: V) -> [V: V] {
-    var queue = PriorityHeap<WeightedEdge<G.Vertex>>()
-    { $0.weight < $1.weight }
+/**
+ A structure used for storing shortest-path estimates for vertices in a graph.
+ */
+private struct WeightedVertex<V: Hashable>: Hashable {
+    let vertex: V
 
-    for neighbor in graph.neighbors(start) {
-        let weight = try! graph.weight(start, to: neighbor)!
-        queue.insert(WeightedEdge<V>(from: start, to: neighbor,
-                                     weight: weight))
+    // The path weight bound and parent may be updated, or 'relaxed'
+    var bound: Double
+    var parent: V?
+
+    var hashValue : Int {
+        return vertex.hashValue
     }
 
-    while !queue.isEmpty {
-        // Take the 
+    /*func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.vertex == rhs.vertex
+    }*/
+}
+
+/**
+ Initializes a dictionary of vertices with their weight bounds, from a given
+ source. The source will get a value of 0, while everything else will get a
+ bound of infinite ( > the sum of all edge weights).
+ 
+ - parameter graph: The graph whose vertices to use.
+ - parameter start: The source vertex to use.
+
+ - returns: A dictionary with a shortest path weight bound for each vertex.
+ */
+private func initializeSingleSource<G: WeightedGraph,
+        V: Hashable where G.Vertex == V>(graph: G,
+                                         start: V) -> Set<WeightedVertex<V>> {
+    var result = Set<WeightedVertex<V>>()
+    let maxWeight = graph.totalWeight + 1.0
+    for vertex in graph.vertices {
+        result.insert(WeightedVertex<V>(vertex: vertex, bound: maxWeight))
+    }
+    result.insert(WeightedVertex<V>(vertex: start, bound: 0))
+    return result
+}
+
+private func relax<G: WeightedGraph,
+                    V: Hashable where G.Vertex == V>(through: V, to: V,
+                    store: Set<WeightedVertex<V>>, inGraph graph: G) {
+    let v = store[store.indexOf(WeightedVertex<V>(vertex: to, bound: 0.0))!]
+    let u = store[store.indexOf(WeightedVertex<V>(vertex: through,
+                                                  bound: 0.0))!]
+    if let weight = try! graph.weight(through, to: to) {
+        if v.bound > u.bound + weight {
+            v.bound = u.bound + weight
+            v.parent = u
+        }
+    } else {
+        print("somehow that edge doesn't exist.")
+    }
+}
+
+
+private func buildDijkstraParents<G: WeightedGraph,
+                    V: Hashable where G.Vertex == V>(graph: G,
+                    start: V) -> Set<WeightedVertex<V>> {
+
+    var result = initializeSingleSource(graph: graph, start: start)
+    var finised = Set<V>
+    var queue = PriorityHeap<WeightedVertex<V>>(items: Array(result))
+    { $0.bound < $1.bound }
+    // weighted edges here do not exactly correspond to edge weights in the
+    // graph, the weights are actually a bound on total weight to the 'to'
+    // vertex from start.
+
+    var currentVertex: WeightedVertex<V>
+    while queue.peek() != nil {
+        // Take the edge with the lowest weight with a non-added vertex, add it
+        currentVertex = queue.extract()
+        finished.insert(currentVertex.vertex)
+
+        for neighbor in try! graph.neighbors(currentVertex.vertex) {
+            relax(through: currentVertex.vertex, to: neighbor, store: result,
+                  inGraph: graph)
+        }
+    }
+
+    return result
+}

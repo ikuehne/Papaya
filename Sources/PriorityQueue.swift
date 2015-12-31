@@ -52,6 +52,7 @@ public protocol PriorityQueue {
        This element is removed if it exists.
      */
     mutating func extract() -> Element?
+
 }
 
 /**
@@ -166,6 +167,40 @@ public struct PriorityHeap<T>: PriorityQueue {
             heap[parent(i)] = temp
             i = parent(i)
         }
+    }
+
+    /**
+     Gets the index in the internal heap of the element matching a given
+     predicate, or nil if no element matches it.
+
+     Will return the first index matching this predicate if multiple elements
+     in the queue match it, so please don't use this if there's a change of
+     that happening.
+
+     - parameter matchingPredicate: The predicate to match elements against.
+
+     - returns: And integer index of the first element matching the predicate,
+       or nil if no element does.
+     */
+    private func getIndex(matchingPredicate: T -> Bool) -> Int? {
+        for (i, element) in heap.enumerate() {
+            if matchingPredicate(element) { return i }
+        }
+        return nil
+    }
+
+    /**
+     Increase the priority to a given value of an element matching the given
+     predicate.
+     TODO Document
+     */
+    func increasePriority(toKey: T,
+                          matchingPredicate: T -> Bool) -> Bool throws {
+        if let index = getIndex(matchingPredicate: matchingPredicate) {
+            try increasePriority(atIndex: index, toKey: toKey)
+            return true
+        }
+        return false
     }
 
 
