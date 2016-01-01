@@ -189,6 +189,11 @@ private struct WeightedVertex<V: Hashable>: Hashable {
     }*/
 }
 
+private func ==<V: Hashable>(lhs: WeightedVertex<V>,
+                             rhs: WeightedVertex<V>) -> Bool {
+    return lhs.vertex == rhs.vertex
+}
+
 /**
  Initializes a dictionary of vertices with their weight bounds, from a given
  source. The source will get a value of 0, while everything else will get a
@@ -205,22 +210,20 @@ private func initializeSingleSource<G: WeightedGraph,
     var result = Set<WeightedVertex<V>>()
     let maxWeight = graph.totalWeight + 1.0
     for vertex in graph.vertices {
-        result.insert(WeightedVertex<V>(vertex: vertex, bound: maxWeight))
+        result.insert(WeightedVertex<V>(vertex: vertex,
+                                        bound: maxWeight, parent: nil))
     }
-    result.insert(WeightedVertex<V>(vertex: start, bound: 0))
+    result.insert(WeightedVertex<V>(vertex: start, bound: 0, parent: nil))
     return result
 }
 
-private func relax<G: WeightedGraph,
-                    V: Hashable where G.Vertex == V>(through: V, to: V,
-                    store: Set<WeightedVertex<V>>, inGraph graph: G) {
-    let v = store[store.indexOf(WeightedVertex<V>(vertex: to, bound: 0.0))!]
-    let u = store[store.indexOf(WeightedVertex<V>(vertex: through,
-                                                  bound: 0.0))!]
-    if let weight = try! graph.weight(through, to: to) {
-        if v.bound > u.bound + weight {
-            v.bound = u.bound + weight
-            v.parent = u
+private func relax<G: WeightedGraph, V: Hashable where G.Vertex == V>(
+        inout through: WeightedVertex<V>, inout to: WeightedVertex<V>,
+        inGraph graph: G) {
+    if let weight = try! graph.weight(through.vertex, to: to.vertex) {
+        if to.bound > through.bound + weight {
+            to.bound = through.bound + weight
+            to.parent = through.vertex
         }
     } else {
         print("somehow that edge doesn't exist.")
@@ -232,8 +235,8 @@ private func buildDijkstraParents<G: WeightedGraph,
                     V: Hashable where G.Vertex == V>(graph: G,
                     start: V) -> Set<WeightedVertex<V>> {
 
-    var result = initializeSingleSource(graph: graph, start: start)
-    var finised = Set<V>
+    var result = initializeSingleSource(graph, start: start)
+    var finished = Set<V>()
     var queue = PriorityHeap<WeightedVertex<V>>(items: Array(result))
     { $0.bound < $1.bound }
     // weighted edges here do not exactly correspond to edge weights in the
@@ -243,14 +246,36 @@ private func buildDijkstraParents<G: WeightedGraph,
     var currentVertex: WeightedVertex<V>
     while queue.peek() != nil {
         // Take the edge with the lowest weight with a non-added vertex, add it
-        currentVertex = queue.extract()
+        currentVertex = queue.extract()!
         finished.insert(currentVertex.vertex)
 
         for neighbor in try! graph.neighbors(currentVertex.vertex) {
-            relax(through: currentVertex.vertex, to: neighbor, store: result,
-                  inGraph: graph)
+            if var adjacent = queue.getElement({ $0.vertex == neighbor }) {
+                relax(&currentVertex, to: &adjacent, inGraph: graph)
+            } else {
+                print("couldn't find one \(neighbor)")
+            }
         }
+        print("loop peeking queue")
     }
 
+    return result
+}
+
+public func dijkstraPath<G: WeightedGraph,
+        V: Hashable where G.Vertex == V>(graph: G, start: V, end: V) -> [V] {
+    let dijkstraParents = buildDijkstraParents(graph, start: start)
+    for element in dijkstraParents {
+        print("\(element.vertex) has weight \(element.bound) and parent \(element.parent)")
+    }
+
+    var result = [V]()
+    var current = end
+    while current != start {
+        result.insert(current, atIndex: 0)
+        current = dijkstraParents[dijkstraParents.indexOf(WeightedVertex<V>(
+            vertex: current, bound: 0.0, parent: nil))!].vertex
+    //    print("loop building path")
+    }
     return result
 }

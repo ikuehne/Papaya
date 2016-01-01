@@ -112,7 +112,7 @@ while current != nil {
     print(current)
 }
 */
-
+/*
 // create the example graph in the caltech math 6 spanning trees lecture
 let vertices = ["r", "a", "b", "c", "d", "e"]
 var graph = WeightedUndirectedAList<String>(vertices: vertices)
@@ -134,3 +134,16 @@ print("minimum spanning tree:")
 print(mst.vertices)
 print(mst.edges)
 print(mst.totalWeight)
+*/
+let vertices = ["s", "t", "y", "x", "z"]
+var graph = WeightedDirectedAList<String>(vertices: vertices)
+let edges = [("s", "t", 10.0), ("s", "y", 5.0), ("t", "x", 1.0),
+             ("t", "y", 2.0), ("y", "t", 3.0), ("y", "x", 9.0),
+             ("y", "z", 2.0), ("z", "x", 6.0), ("z", "s", 7.0)]
+for edge in edges {
+    let (a, b, w) = edge
+    try! graph.addEdge(a, to: b, weight: w)
+}
+
+let thing = dijkstraPath(graph, start: "s", end: "x")
+print(thing)

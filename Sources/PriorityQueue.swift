@@ -189,15 +189,24 @@ public struct PriorityHeap<T>: PriorityQueue {
         return nil
     }
 
+    func getElement(matchingPredicate: T -> Bool) -> T? {
+        if let index = getIndex(matchingPredicate) {
+            return heap[index]
+        } else {
+            print("couldn't find matching predicate \(matchingPredicate)")
+            return nil
+        }
+    }
+
     /**
      Increase the priority to a given value of an element matching the given
      predicate.
      TODO Document
      */
-    func increasePriority(toKey: T,
-                          matchingPredicate: T -> Bool) -> Bool throws {
-        if let index = getIndex(matchingPredicate: matchingPredicate) {
-            try increasePriority(atIndex: index, toKey: toKey)
+    mutating func increasePriorityMatching(toKey: T,
+                          matchingPredicate: T -> Bool) throws -> Bool {
+        if let index = getIndex(matchingPredicate) {
+            try increasePriority(index, toKey: toKey)
             return true
         }
         return false
