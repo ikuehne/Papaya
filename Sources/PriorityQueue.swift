@@ -179,7 +179,7 @@ public struct PriorityHeap<T>: PriorityQueue {
 
      - parameter matchingPredicate: The predicate to match elements against.
 
-     - returns: And integer index of the first element matching the predicate,
+     - returns: An integer index of the first element matching the predicate,
        or nil if no element does.
      */
     private func getIndex(matchingPredicate: T -> Bool) -> Int? {
@@ -189,21 +189,24 @@ public struct PriorityHeap<T>: PriorityQueue {
         return nil
     }
 
-    func getElement(matchingPredicate: T -> Bool) -> T? {
-        if let index = getIndex(matchingPredicate) {
-            return heap[index]
-        } else {
-            print("couldn't find matching predicate \(matchingPredicate)")
-            return nil
-        }
-    }
-
     /**
      Increase the priority to a given value of an element matching the given
-     predicate.
-     TODO Document
+     predicate. Similar to Decrease/Increse Key in CLRS.
+
+     - parameter toKey: the new key, with a new priority value. Same type as
+       the elements of the queue.
+     - parameter matchingPredicate: a function describing which element to
+       increase the priority of. Should return true on exactly one of the
+       queue's elements.
+
+     - throws: HeapError.LowerPriority if the new key has lower priority than
+       the old one. If an equal priority behavior may happen, the comparison
+       function initializing the heap should reflect this.
+
+     - returns: a boolean representing whether or not the predicate was matched
+       for some element. Returns false if this was a no-op.
      */
-    mutating func increasePriorityMatching(toKey: T,
+    public mutating func increasePriorityMatching(toKey: T,
                           matchingPredicate: T -> Bool) throws -> Bool {
         if let index = getIndex(matchingPredicate) {
             try increasePriority(index, toKey: toKey)

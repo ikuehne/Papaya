@@ -169,7 +169,7 @@ public func primsSpanningTree<G: WeightedGraph where G.Vertex: Hashable>(
     return tree
 
 }
-
+/*
 /**
  A structure used for storing shortest-path estimates for vertices in a graph.
  */
@@ -193,6 +193,7 @@ private func ==<V: Hashable>(lhs: WeightedVertex<V>,
                              rhs: WeightedVertex<V>) -> Bool {
     return lhs.vertex == rhs.vertex
 }
+*/
 
 /**
  A class for running Dijkstra's algorithm on weighted graphs.
@@ -256,15 +257,18 @@ private class DijkstraController<G: WeightedGraph,
     func dijkstra() {
         var finished = Set<V>()
         var queue = PriorityHeap<V>(items: graph.vertices) {
-            self.distances[$0]! < self.distances[$1]!
+            self.distances[$0]! <= self.distances[$1]!
         }
         while queue.peek() != nil {
             let vertex = queue.extract()!
             finished.insert(vertex)
             for neighbor in try! graph.neighbors(vertex) {
                 relax(vertex, to: neighbor)
+                try! queue.increasePriorityMatching(neighbor,
+                        matchingPredicate: { $0 == neighbor })
+                // this maintains the heap property - we may decrease the key
+                // of the neighbor
             }
-            // Maybe need to heapify the queue
         }
     }
 
@@ -295,8 +299,8 @@ private class DijkstraController<G: WeightedGraph,
 }
 
 
-func dijkstraShortestPath<G: WeightedGraph, V: Hashable where G.Vertex == V>(
-        graph: G, start: V, end: V) -> [V]? {
+public func dijkstraShortestPath<G: WeightedGraph,
+        V: Hashable where G.Vertex == V>(graph: G, start: V, end: V) -> [V]? {
 
     let controller = DijkstraController<G, V>(g: graph, s: start)
     

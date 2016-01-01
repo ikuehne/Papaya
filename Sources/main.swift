@@ -152,3 +152,19 @@ print(thing)
 
 thing = dijkstraShortestPath(graph, start: "s", end: "z")
 print(thing)
+
+// example dijkstra run from youtube
+let verts = [1, 2, 3, 4, 5, 6, 7]
+let es = [(1, 2, 3.0), (1, 3, 5.0), (1, 4, 6.0), (2, 4, 2.0),
+             (3, 4, 2.0), (3, 6, 3.0), (3, 7, 7.0), (3, 5, 6.0),
+             (4, 6, 9.0), (5, 6, 5.0), (5, 7, 2.0), (6, 7, 1.0)]
+var graph2 = WeightedUndirectedAList<Int>(vertices: verts)
+for edge in es {
+    let (a, b, w) = edge
+    try! graph2.addEdge(a, to: b, weight: w)
+}
+
+var thing2 = dijkstraShortestPath(graph2, start: 1, end: 4)
+print(thing2)
+thing2 = dijkstraShortestPath(graph2, start: 1, end: 7)
+print(thing2)
