@@ -195,6 +195,117 @@ private func ==<V: Hashable>(lhs: WeightedVertex<V>,
 }
 
 /**
+ A class for running Dijkstra's algorithm on weighted graphs.
+
+ It stores the .d and .pi attributes for the graph's vertices, as described in
+ CLRS, and handles procedures such as initialize single source and relax.
+
+ Note that Dijkstra assumes a positive-weight graph.
+ */
+private class DijkstraController<G: WeightedGraph,
+        V: Hashable where G.Vertex == V> {
+
+    var distances = [V: Double]()
+    var parents = [V: V]()
+    var graph: G
+    var start: V
+    
+    /**
+     Initialize single source (see CLRS) - gives each vertex a distance
+     estimate of infinity (greater than the total weight of all edges in the
+     graph), and a parent value of nil (not in the dictionary).
+
+     - parameter g: A weighted graph on which we will be searching for shortest
+       paths.
+     - parameter start: the vertex to start from - this will get a distance
+       estimate of 0.
+     */
+    init(g: G, s: V) {
+        graph = g
+        start = s
+        let totalweights = g.totalWeight + 1.0
+        for vertex in g.vertices {
+            distances[vertex] = totalweights
+        }
+        distances[start] = 0
+    }
+
+    /**
+     Relaxes the distance estimate of the second given vertex by way of the
+     first given vertex.
+
+     - parameter from: The vertex from which we relax the distance estimate.
+     - parameter to: the vertex for which we relax the distance estimate.
+
+     Note, this assumes that the edge and both vertices exist in the graph.
+     */
+    func relax(from: V, to: V) {
+        let weight = try! graph.weight(from, to: to)!
+        if distances[to]! > distances[from]! + weight {
+            distances[to] = distances[from]! + weight
+            parents[to] = from
+        }
+    }
+
+    /**
+     Runs dijkstra's algorithm on the graph, as described in CLRS.
+
+     Just sets up the parent and distance bound dictionaries, does not return
+     any paths - that method is different.
+     */
+    func dijkstra() {
+        var finished = Set<V>()
+        var queue = PriorityHeap<V>(items: graph.vertices) {
+            self.distances[$0]! < self.distances[$1]!
+        }
+        while queue.peek() != nil {
+            let vertex = queue.extract()!
+            finished.insert(vertex)
+            for neighbor in try! graph.neighbors(vertex) {
+                relax(vertex, to: neighbor)
+            }
+            // Maybe need to heapify the queue
+        }
+    }
+
+    /**
+     Gives the shortest path to the given vertex.
+
+     - parameter to: The destination vertex of the path to find.
+
+     - returns: an array of vertices representing the shortest path, or nil if
+       no path exists in the graph.
+     */
+    func dijkstraPath(to: V) -> [V]? {
+        if parents[to] == nil {
+            return nil
+        }
+        var result = [V]()
+
+        var current: V? = to
+        repeat {
+            result.insert(current!, atIndex: 0)
+            current = parents[current!]
+        } while current != nil && current != start
+
+        result.insert(start, atIndex: 0)
+        return result
+    }
+
+}
+
+
+func dijkstraShortestPath<G: WeightedGraph, V: Hashable where G.Vertex == V>(
+        graph: G, start: V, end: V) -> [V]? {
+
+    let controller = DijkstraController<G, V>(g: graph, s: start)
+    
+    controller.dijkstra()
+
+    return controller.dijkstraPath(end)
+}
+/*
+/**
  Initializes a dictionary of vertices with their weight bounds, from a given
  source. The source will get a value of 0, while everything else will get a
  bound of infinite ( > the sum of all edge weights).
@@ -279,3 +390,4 @@ public func dijkstraPath<G: WeightedGraph,
     }
     return result
 }
+*/

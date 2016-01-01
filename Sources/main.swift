@@ -135,6 +135,8 @@ print(mst.vertices)
 print(mst.edges)
 print(mst.totalWeight)
 */
+
+// example dijkstra run from CLRS
 let vertices = ["s", "t", "y", "x", "z"]
 var graph = WeightedDirectedAList<String>(vertices: vertices)
 let edges = [("s", "t", 10.0), ("s", "y", 5.0), ("t", "x", 1.0),
@@ -145,5 +147,8 @@ for edge in edges {
     try! graph.addEdge(a, to: b, weight: w)
 }
 
-let thing = dijkstraPath(graph, start: "s", end: "x")
+var thing = dijkstraShortestPath(graph, start: "s", end: "x")
+print(thing)
+
+thing = dijkstraShortestPath(graph, start: "s", end: "z")
 print(thing)
