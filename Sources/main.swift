@@ -1,17 +1,115 @@
 /**
  Executable tests for the Papaya graph package
  */
- 
-// How I imagine it will work:
-// import XCTest
-/*
+
+/**
+ Tests for undirected adjacency list implementation of graphs
+ */
+
 let names = ["Kevin Bacon", "Nets Katz", "Paul Erdos", "Natalie Portman",
              "MC Bat Commander"]
+let relationships = [("Kevin Bacon", "Natalie Portman"),
+        ("Paul Erdos", "Nets Katz"), ("Paul Erdos", "Natalie Portman")]
 
-var graph = UndirectedAList(vertices: names)
+func testInits() {
+    // Test the empty initializer
+    var graph = UndirectedAList<String>()
+    assert(graph.vertices.isEmpty)
+    assert(graph.edges.isEmpty)
 
-print(graph.vertices)
+    // Test initializing with an array of vertices
+    graph = UndirectedAList<String>(vertices: [])
+    assert(graph.vertices.isEmpty)
+    assert(graph.edges.isEmpty)
 
+    let setnames: Set<String> = Set(names)
+    graph = UndirectedAList<String>(vertices: names)
+    var setverts: Set<String> = Set(graph.vertices)
+    assert(setnames == setverts)
+    assert(graph.edges.isEmpty)
+
+    // Test initializing with another graph
+    // note: where to test this when one graph has edges?
+    var graph2 = UndirectedAList<String>(graph: graph)
+    setverts = Set(graph2.vertices)
+    assert(setnames == setverts)
+    assert(graph2.edges.isEmpty)
+
+    graph = UndirectedAList<String>()
+    graph2 = UndirectedAList<String>(graph: graph)
+    assert(graph2.vertices.isEmpty)
+    assert(graph2.edges.isEmpty)
+}
+
+private func ==<T: Equatable>(lhs: (T, T), rhs: (T, T)) -> Bool {
+    let (a, b) = lhs
+    let (c, d) = rhs
+    return (a == c && b == d) || (a == d && b == c)
+}
+ 
+private func ==<T: Equatable>(lhs: [(T, T)], rhs: [(T, T)]) -> Bool {
+    for item1 in lhs {
+        var found = false
+        for item2 in rhs {
+            found = found || (item1 == item2)
+        }
+        if !found { return false }
+    }
+    for item1 in rhs {
+        var found = false
+        for item2 in lhs {
+            found = found || (item1 == item2)
+        }
+        if !found { return false }
+    }
+    return true
+}
+
+func testEdgesEqual() {
+    let edges1 = [("a", "b"), ("c", "d"), ("a", "c")]
+    let edges2 = [("b", "a"), ("a", "c"), ("d", "c")]
+    let edges3 = [("a", "b"), ("a", "c"), ("e", "f"), ("e", "a")]
+
+    assert(!(edges1 == edges3))
+    assert(edges1 == edges2)
+    assert(!(edges2 == edges3))
+}
+
+
+func testAddRemoveVertex() {
+    // Adding vertices
+    var graph = UndirectedAList<String>()
+    try! graph.addVertex("James")
+    assert(graph.vertices == ["James"])
+    try! graph.addVertex("Mitchard")
+    assert(Set(graph.vertices) == Set(["James", "Mitchard"]))
+
+    graph = UndirectedAList<String>(vertices: names)
+    try! graph.addVertex("Earl")
+    var setnames = Set(names)
+    setnames.insert("Earl")
+    assert(Set(graph.vertices) == setnames)
+    setnames.remove("MC Bat Commander")
+    try! graph.removeVertex("MC Bat Commander")
+    assert(Set(graph.vertices) == setnames)
+
+    for name in names {
+        try? graph.removeVertex(name)
+        // using try? allows this to pass over nonexistant edges
+    }
+    try! graph.removeVertex("Earl")
+    assert(graph.vertices.isEmpty)
+
+    // Test removing a vertex with edges
+    graph = UndirectedAList<String>(vertices: names)
+    for (from, to) in relationships {
+        try! graph.addEdge(from, to: to)
+    }
+    assert(graph.edges == relationships)
+    try! graph.removeVertex("Natalie Portman")
+    assert(graph.edges == [("Paul Erdos", "Nets Katz")])
+}
+/*
 do {
     try graph.addEdge("Kevin Bacon", to: "Natalie Portman")
     try graph.addEdge("Paul Erdos", to: "Nets Katz")
@@ -168,3 +266,7 @@ var thing2 = dijkstraShortestPath(graph2, start: 1, end: 4)
 print(thing2)
 thing2 = dijkstraShortestPath(graph2, start: 1, end: 7)
 print(thing2)
+
+testInits()
+testEdgesEqual()
+testAddRemoveVertex()
